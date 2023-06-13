@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Signup from "./pages/signup/Signup";
-import { Home } from "./pages/home/index";
-import Login from "./pages/Login";
+import { Login } from "./pages/Auth/Login";
+import { Home } from "./pages/Home";
+import { PrivateRoute } from "./components/PriveteRoute";
+import { Signup } from "./pages/Auth/Signup";
 
 function App() {
   return (
@@ -9,7 +10,15 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/signup" element={<Signup />} />
-          <Route exact path="/" element={<Home />} />
+          <Route
+            exact
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
           <Route exact path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>

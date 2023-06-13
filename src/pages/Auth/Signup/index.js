@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   TextField,
@@ -9,17 +9,31 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { signInAuth } from "../Reducer";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader";
 
-export default function Signup() {
+export const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const dispatch = useDispatch();
+  const { isLoading, token, isError, data } = useSelector(
+    (state) => state.Auth
+  );
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token]);
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -38,9 +52,6 @@ export default function Signup() {
       case "userName":
         setUserName(value);
         break;
-      case "email":
-        setEmail(value);
-        break;
       case "password":
         setPassword(value);
         break;
@@ -49,6 +60,9 @@ export default function Signup() {
         break;
       case "checkbox":
         setTermsAccepted(!termsAccepted);
+        break;
+      case "passwordError":
+        setPasswordError(value);
         break;
       default:
         break;
@@ -66,14 +80,14 @@ export default function Signup() {
     if (!userName) {
       newErrors.userName = "Username is required";
     }
-    if (!email) {
-      newErrors.email = "Email is required";
-    }
     if (!password) {
       newErrors.password = "Password is required";
     }
     if (!confirmPassword) {
       newErrors.confirmPassword = "Confirm Password is required";
+    }
+    if (password !== confirmPassword) {
+      newErrors.passwordError = "Password should be match";
     }
     if (!termsAccepted) {
       newErrors.termsAccepted = "You must accept the Terms & Conditions";
@@ -83,9 +97,12 @@ export default function Signup() {
 
     if (Object.keys(newErrors).length === 0) {
       // Form submission logic here
-      console.log("Form submitted");
+      dispatch(signInAuth({ fullName, userName, password, confirmPassword }));
     }
   };
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <Container>
       <FormContainer>
@@ -106,14 +123,6 @@ export default function Signup() {
             onChange={(e) => handleChange("userName", e.target.value)}
             error={!!errors.userName}
             helperText={errors.userName}
-          />
-          <StyledTextField
-            fullWidth
-            label="Email"
-            value={email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            error={!!errors.email}
-            helperText={errors.email}
           />
           <StyledTextField
             fullWidth
@@ -142,6 +151,11 @@ export default function Signup() {
               ),
             }}
           />
+          {passwordError && (
+            <p style={{ color: "red", fontSize: "0.8rem" }}>
+              {errors.passwordError}
+            </p>
+          )}
           <StyledFormControlLabel
             control={
               <Checkbox
@@ -164,22 +178,22 @@ export default function Signup() {
       </FormContainer>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: "white";
-  background-image: url("https://cdn.dribbble.com/users/371199/screenshots/12030142/connect-1_4x.jpg");
-  background-size: cover;
+  background-color: #f3f9ff;
 `;
 
 const FormContainer = styled.div`
   width: 30%;
   padding: 50px;
   background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.h1`

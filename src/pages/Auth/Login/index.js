@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { TextField, Button, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { LoginAuth } from "../Reducer";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../../components/Loader";
 
 const Container = styled.div`
   display: flex;
@@ -38,15 +41,25 @@ const SignupLink = styled(RouterLink)`
   margin-top: 10px;
 `;
 
-const Login = () => {
+export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-
+  const dispatch = useDispatch();
+  const { isLoading, token, isError, data } = useSelector(
+    (state) => state.Auth
+  );
+  const navigate = useNavigate();
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token]);
 
   const handleChange = (field, value) => {
     setErrors((prevErrors) => {
@@ -84,10 +97,14 @@ const Login = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // Form submission logic here
+      dispatch(LoginAuth({ username, password }));
       console.log("Form submitted");
     }
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <Container>
       <FormContainer>
@@ -133,5 +150,3 @@ const Login = () => {
     </Container>
   );
 };
-
-export default Login;
