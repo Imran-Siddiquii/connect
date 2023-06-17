@@ -1,21 +1,12 @@
-import styled from "styled-components";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import { Sidebar } from "../../container/Sidebar";
-import { RightSidebar } from "../../container/RightSideBar";
-import { useEffect } from "react";
-import { fetchUserPost } from "../../container/UserPostContainer/userPostSlice";
-import { useDispatch } from "react-redux";
-import BasicTabs from "../../components/UserTab";
+import { Container, Grid } from "@mui/material";
+import React from "react";
+import { Sidebar } from "../Sidebar";
+import { RightSidebar } from "../RightSideBar";
+import { styled } from "styled-components";
 
-export const Home = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUserPost());
-  }, []);
-
+export const LikedPost = () => {
   return (
-    <div>
+    <>
       <StyledContainer maxWidth="xl">
         <Grid container>
           {/* First column */}
@@ -30,7 +21,11 @@ export const Home = () => {
           </Grid>
           {/* Second column */}
           <Grid item xs={12} sm={6} style={{ padding: "0rem 2rem" }}>
-            <BasicTabs />
+            {/* {isLoading ? (
+            <Loader />
+          ) : (
+            posts?.map((card) => <UserPost posts={card} />)
+          )} */}
           </Grid>
           {/* Third column */}
           <Grid
@@ -43,11 +38,11 @@ export const Home = () => {
           </Grid>
         </Grid>
       </StyledContainer>
-    </div>
+    </>
   );
 };
 
-const StyledContainer = styled(Container)`
+export const StyledContainer = styled(Container)`
   height: 100vh;
   margin-top: 4.5rem;
   padding: 0 !important;

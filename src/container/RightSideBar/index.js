@@ -9,7 +9,7 @@ import {
 
 export const RightSidebar = () => {
   return (
-    <StickyColumn>
+    <StickyColumn style={{ boxShadow: "-2px -2px 8px 1px #7fbaf5" }}>
       <RightSidebarContainer>
         <RightSidebarItem>
           <RightSidebarItemImage

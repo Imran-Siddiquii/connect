@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const StickyColumn = styled.div`
@@ -6,7 +7,8 @@ export const StickyColumn = styled.div`
   width: 25%;
   height: 100%;
   overflow-y: auto;
-  border: 1px solid red;
+  ${"" /* border: 1px solid red; */}
+  box-shadow: 2px 2px 8px 1px #7fbaf5;
   background-color: #f3f9ff;
   scrollbar-width: thin;
   scrollbar-color: #ccc #f5f5f5;
@@ -32,31 +34,31 @@ export const StickyColumn = styled.div`
   }
 `;
 export const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   margin-right: 12px;
 `;
 
 export const ProfileName = styled.div`
   font-weight: bold;
-  font-size: 14px;
+  font-size: 1.3rem;
 `;
 
 export const SidebarIcon = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin: 1.5rem 0rem;
 `;
 
-export const SidebarIconImage = styled.img`
-  width: 24px;
-  height: 24px;
+export const SidebarIconImage = styled.div`
+  width: 35px;
+  height: 30px;
   margin-right: 12px;
 `;
 
 export const SidebarIconText = styled.div`
-  font-size: 14px;
+  font-size: 1.3rempx;
 `;
 
 export const LeftSideContainer = styled.div`
@@ -86,4 +88,10 @@ export const RightSidebarItemImage = styled.img`
 
 export const RightSidebarItemText = styled.div`
   font-size: 14px;
+`;
+
+export const NavLinkDiv = styled(NavLink)`
+  color: #1976d2;
+  underline: none;
+  text-decoration: none;
 `;

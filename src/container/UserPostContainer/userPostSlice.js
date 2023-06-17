@@ -17,10 +17,47 @@ const userPostSlice = createSlice({
     userPost: (state, { payload }) => {
       state.posts = payload.posts;
     },
+    likePost: (state, { payload }) => {
+      const likePostCount = state?.posts?.map((ele) => {
+        if (ele.id == payload.id) {
+          return {
+            ...ele,
+            likes: {
+              ...ele.likes,
+              likeCount: ele.likes.likeCount + 1,
+              likedBy: [payload],
+            },
+          };
+        } else {
+          return ele;
+        }
+      });
+      console.log(likePostCount, "post ");
+      state.posts = likePostCount;
+    },
+    dislikePost: (state, { payload }) => {
+      const dislikePostCount = state?.posts?.map((ele) => {
+        if (ele.id == payload.id) {
+          return {
+            ...ele,
+            likes: {
+              ...ele.likes,
+              dislikeCount: ele.likes.dislikeCount - 1,
+              dislikedBy: [payload],
+            },
+          };
+        } else {
+          return ele;
+        }
+      });
+      console.log(dislikePostCount, "post ");
+      state.posts = dislikePostCount;
+    },
   },
 });
 
-export const { loading, error, userPost } = userPostSlice.actions;
+export const { loading, error, userPost, likePost, dislikePost } =
+  userPostSlice.actions;
 export default userPostSlice.reducer;
 
 export const fetchUserPost = () => {

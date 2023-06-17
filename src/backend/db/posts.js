@@ -15,7 +15,8 @@ export const posts = [
     userImage:
       "https://images.unsplash.com/photo-1495344517868-8ebaf0a2044a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80",
     likes: {
-      likeCount: 0,
+      dislikeCount: 0,
+      likeCount: 15,
       likedBy: [],
       dislikedBy: [],
     },
@@ -33,7 +34,8 @@ export const posts = [
     userImage:
       "https://i.pinimg.com/originals/f3/1e/6b/f31e6bf4eaee4e6d25ead5ab4db6e5d7.jpg",
     likes: {
-      likeCount: 0,
+      dislikeCount: 0,
+      likeCount: 12,
       likedBy: [],
       dislikedBy: [],
     },
@@ -50,6 +52,7 @@ export const posts = [
     userImage:
       "https://images.unsplash.com/photo-1516571416226-75244e50766f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&w=1000&q=80",
     likes: {
+      dislikeCount: 0,
       likeCount: 0,
       likedBy: [],
       dislikedBy: [],
@@ -67,7 +70,8 @@ export const posts = [
     userImage:
       "https://images.unsplash.com/photo-1520967782066-e09c18e5d1b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     likes: {
-      likeCount: 0,
+      dislikeCount: 0,
+      likeCount: 32,
       likedBy: [],
       dislikedBy: [],
     },
@@ -83,7 +87,8 @@ export const posts = [
     userImage:
       "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D&w=1000&q=80",
     likes: {
-      likeCount: 0,
+      dislikeCount: 0,
+      likeCount: 4,
       likedBy: [],
       dislikedBy: [],
     },

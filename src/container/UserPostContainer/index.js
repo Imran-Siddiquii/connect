@@ -11,8 +11,23 @@ import {
   UserPostProfileImage,
   UserPostProfileName,
 } from "./style";
+import { ThumbDown, ThumbUp } from "@mui/icons-material";
+import { Box, Button, Grid, Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { dislikePost, likePost } from "./userPostSlice";
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  cursor: "pointer",
+  width: "100%",
+}));
 export const UserPost = ({ posts }) => {
+  const dispatch = useDispatch();
   return (
     <UserPostContainer>
       <UserPostHeader>
@@ -48,48 +63,55 @@ export const UserPost = ({ posts }) => {
         </UserPostActions>
       </UserPostHeader>
       <UserPostContent>{posts.content}</UserPostContent>
-      <UserPostImage src={posts.postImageUrl} alt="Post" />
+      <UserPostImage
+        src={posts.postImageUrl}
+        style={{
+          height: "350px",
+          marginRight: "4px",
+        }}
+        alt="Post"
+      />
       <UserPostActions>
-        <UserPostAction>{posts.likes?.likesCount}</UserPostAction>
-        <UserPostAction>5 Comments</UserPostAction>
-        <UserPostAction>2 Shares</UserPostAction>
-        <UserPostActionButton>
-          <img
-            src="like-icon.png"
-            alt="Like"
-            style={{
-              width: "20px",
-              height: "20px",
-              marginRight: "8px",
-            }}
-          />
-          Like
-        </UserPostActionButton>
-        <UserPostActionButton>
-          <img
-            src="comment-icon.png"
-            alt="Comment"
-            style={{
-              width: "20px",
-              height: "20px",
-              marginRight: "8px",
-            }}
-          />
-          Comment
-        </UserPostActionButton>
-        <UserPostActionButton>
-          <img
-            src="share-icon.png"
-            alt="Share"
-            style={{
-              width: "20px",
-              height: "20px",
-              marginRight: "8px",
-            }}
-          />
-          Share
-        </UserPostActionButton>
+        <UserPostAction>
+          <ThumbUp color="primary" />{" "}
+          <span> {posts.likes?.likedBy?.[0]?.username}</span>{" "}
+          {posts.likes?.likeCount} Likes
+        </UserPostAction>
       </UserPostActions>
+      <UserPostActions>
+        <UserPostAction>
+          <ThumbDown color="warning" />{" "}
+          <span> {posts.likes?.dislikedBy?.[0]?.username}</span>{" "}
+          {posts.likes?.dislikeCount} dislikes
+        </UserPostAction>
+      </UserPostActions>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={4} columns={16}>
+          <Grid item xs={8}>
+            <Item>
+              <Button
+                style={{ width: "100%" }}
+                onClick={() => dispatch(likePost(posts))}
+                startIcon={<ThumbUp />}
+              >
+                Like
+              </Button>
+            </Item>
+          </Grid>
+          <Grid item xs={8}>
+            <Item>
+              <Button
+                onClick={() => dispatch(dislikePost(posts))}
+                color="warning"
+                style={{ width: "100%" }}
+                startIcon={<ThumbDown />}
+              >
+                Dislike
+              </Button>
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
     </UserPostContainer>
   );
 };
