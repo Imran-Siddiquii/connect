@@ -11,11 +11,23 @@ import {
   UserPostProfileImage,
   UserPostProfileName,
 } from "./style";
-import { ThumbDown, ThumbUp } from "@mui/icons-material";
-import { Box, Button, Grid, Paper } from "@mui/material";
+import {
+  Bookmark,
+  BookmarkAddOutlined,
+  BookmarkRemoveOutlined,
+  ThumbDown,
+  ThumbUp,
+} from "@mui/icons-material";
+import { Box, Button, Grid, Paper, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
-import { dislikePost, likePost } from "./userPostSlice";
+import {
+  addToBookmarkPost,
+  dislikePost,
+  likePost,
+  removeToBookmarkPost,
+} from "./userPostSlice";
+import { AddBookmark, RemoveBookmark } from "../Bookmark/bookmarkSlice";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,8 +38,18 @@ const Item = styled(Paper)(({ theme }) => ({
   cursor: "pointer",
   width: "100%",
 }));
-export const UserPost = ({ posts }) => {
+export const UserPost = ({ posts, removeBookmark, handleRemoveBookmark }) => {
   const dispatch = useDispatch();
+
+  const addToBookmark = (post) => {
+    dispatch(addToBookmarkPost(post._id));
+    dispatch(AddBookmark(post._id));
+  };
+
+  const removeToBookmark = (id) => {
+    dispatch(RemoveBookmark(id));
+    dispatch(removeToBookmarkPost(id));
+  };
   return (
     <UserPostContainer>
       <UserPostHeader>
@@ -36,29 +58,46 @@ export const UserPost = ({ posts }) => {
           <UserPostProfileName>John Doe</UserPostProfileName>
         </UserPostProfile>
         <UserPostActions>
+          {removeBookmark ? (
+            <UserPostAction>
+              <div
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  marginRight: "4px",
+                }}
+              >
+                <Tooltip
+                  title="Remove Bookmark"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => removeToBookmark(posts._id)}
+                >
+                  <BookmarkRemoveOutlined color="primary" />
+                </Tooltip>
+              </div>
+            </UserPostAction>
+          ) : null}
           <UserPostAction>
-            <img
-              src={posts.postImageUrl}
-              alt="Edit"
+            <span
               style={{
                 width: "16px",
                 height: "16px",
                 marginRight: "4px",
               }}
-            />
-            Edit
-          </UserPostAction>
-          <UserPostAction>
-            <img
-              src="https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?cs=srgb&dl=pexels-pixabay-268533.jpg&fm=jpg"
-              alt="Bookmark"
-              style={{
-                width: "16px",
-                height: "16px",
-                marginRight: "4px",
-              }}
-            />
-            Bookmark
+            >
+              {posts?.isBookmark || removeBookmark ? (
+                <Tooltip title="BookMarked">
+                  <Bookmark color="primary" />
+                </Tooltip>
+              ) : (
+                <Tooltip title="Add To Bookmark" style={{ cursor: "pointer" }}>
+                  <BookmarkAddOutlined
+                    color="primary"
+                    onClick={() => addToBookmark(posts)}
+                  />
+                </Tooltip>
+              )}
+            </span>
           </UserPostAction>
         </UserPostActions>
       </UserPostHeader>

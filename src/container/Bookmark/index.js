@@ -1,10 +1,24 @@
-import { Container, Grid } from "@mui/material";
-import React from "react";
+import { Button, Container, Grid } from "@mui/material";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { Sidebar } from "../Sidebar";
 import { RightSidebar } from "../RightSideBar";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../components/Loader";
+import { UserPost } from "../UserPostContainer";
+import { fetchBookmark } from "./bookmarkSlice";
+import { NavLink } from "react-router-dom";
 
 export const Bookmark = () => {
+  const { loading, error, bookmarkPost } = useSelector(
+    (state) => state.bookmark
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBookmark());
+  }, []);
   return (
     <>
       <StyledContainer maxWidth="xl">
@@ -21,11 +35,21 @@ export const Bookmark = () => {
           </Grid>
           {/* Second column */}
           <Grid item xs={12} sm={6} style={{ padding: "0rem 2rem" }}>
-            {/* {isLoading ? (
+            {bookmarkPost.length === 0 ? (
+              <div style={{ textAlign: "center" }}>
+                <h3>No Post In Bookmark </h3>
+                <NavLink to="/">
+                  <Button variant="contained">Add Now</Button>
+                </NavLink>
+              </div>
+            ) : null}
+            {loading ? (
               <Loader />
             ) : (
-              posts?.map((card) => <UserPost posts={card} />)
-            )} */}
+              bookmarkPost.map((card) => (
+                <UserPost posts={card} removeBookmark />
+              ))
+            )}
           </Grid>
           {/* Third column */}
           <Grid

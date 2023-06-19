@@ -17,27 +17,26 @@ const userPostSlice = createSlice({
     userPost: (state, { payload }) => {
       state.posts = payload.posts;
     },
-    likePost: (state, { payload }) => {
-      const likePostCount = state?.posts?.map((ele) => {
-        if (ele.id == payload.id) {
-          return {
-            ...ele,
-            likes: {
-              ...ele.likes,
-              likeCount: ele.likes.likeCount + 1,
-              likedBy: [payload],
-            },
-          };
-        } else {
-          return ele;
-        }
-      });
-      console.log(likePostCount, "post ");
-      state.posts = likePostCount;
-    },
+    // likePost: (state, { payload }) => {
+    //   const likePostCount = state?.posts?.map((ele) => {
+    //     if (ele._id == payload._id) {
+    //       return {
+    //         ...ele,
+    //         likes: {
+    //           ...ele.likes,
+    //           likeCount: ele.likes.likeCount + 1,
+    //           likedBy: [payload],
+    //         },
+    //       };
+    //     } else {
+    //       return ele;
+    //     }
+    //   });
+    //   state.posts = likePostCount;
+    // },
     dislikePost: (state, { payload }) => {
       const dislikePostCount = state?.posts?.map((ele) => {
-        if (ele.id == payload.id) {
+        if (ele._id == payload._id) {
           return {
             ...ele,
             likes: {
@@ -50,18 +49,63 @@ const userPostSlice = createSlice({
           return ele;
         }
       });
-      console.log(dislikePostCount, "post ");
       state.posts = dislikePostCount;
+    },
+    likePost: (state, { payload }) => {
+      const likePostCount = state?.posts?.map((ele) => {
+        if (ele._id === payload) {
+          return {
+            ...ele,
+            isCart: true,
+            likes: {
+              ...ele.likes,
+              likeCount: ele.likes.likeCount + 1,
+              likedBy: [payload],
+            },
+          };
+        }
+        return ele;
+      });
+      state.posts = likePostCount;
+    },
+    addToBookmarkPost: (state, { payload }) => {
+      console.log("🚀 ~ file: userPostSlice.js:81 ~ payload:", payload);
+      const bookmarkPost = state?.posts?.map((ele) => {
+        if (ele._id === payload) {
+          return { ...ele, isBookmark: true };
+        }
+        return ele;
+      });
+      console.log(
+        "🚀 ~ file: userPostSlice.js:80 ~ bookmarkPost:",
+        bookmarkPost
+      );
+      state.posts = bookmarkPost;
+    },
+    removeToBookmarkPost: (state, { payload }) => {
+      const unbookmark = state?.posts?.map((ele) => {
+        if (ele._id === payload) {
+          return { ...ele, isBookmark: false };
+        }
+        return ele;
+      });
+      state.posts = unbookmark;
     },
   },
 });
 
-export const { loading, error, userPost, likePost, dislikePost } =
-  userPostSlice.actions;
+export const {
+  loading,
+  error,
+  userPost,
+  likePost,
+  dislikePost,
+  addToBookmarkPost,
+  removeToBookmarkPost,
+} = userPostSlice.actions;
 export default userPostSlice.reducer;
 
 export const fetchUserPost = () => {
-  console.log("ghghdfg");
   return async function get(dispatch) {
     dispatch(loading(true));
 
@@ -70,9 +114,7 @@ export const fetchUserPost = () => {
       const data = await response.json();
       dispatch(userPost(data));
       dispatch(loading(false));
-      console.log("ghgh", response, data);
     } catch (err) {
-      console.log("ghghdfg");
       dispatch(loading(false));
       dispatch(error(true));
     }

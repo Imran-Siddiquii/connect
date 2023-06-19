@@ -9,11 +9,6 @@ import { useDispatch } from "react-redux";
 import BasicTabs from "../../components/UserTab";
 
 export const Home = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUserPost());
-  }, []);
-
   return (
     <div>
       <StyledContainer maxWidth="xl">

@@ -8,6 +8,9 @@ import { Profile } from "./container/Profile";
 import { LikedPost } from "./container/LikedPost";
 import { Bookmark } from "./container/Bookmark";
 import Header from "./components/Header";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchUserPost } from "./container/UserPostContainer/userPostSlice";
 
 const theme = createTheme({
   breakpoints: {
@@ -21,6 +24,10 @@ const theme = createTheme({
   },
 });
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserPost());
+  }, []);
   return (
     <>
       <ThemeProvider theme={theme}>
