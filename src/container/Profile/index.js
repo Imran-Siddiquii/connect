@@ -3,6 +3,7 @@ import React from "react";
 import { Sidebar } from "../Sidebar";
 import { RightSidebar } from "../RightSideBar";
 import { styled } from "styled-components";
+import { ProfileCard } from "../../components/ProfileCard";
 
 export const Profile = () => {
   return (
@@ -21,11 +22,7 @@ export const Profile = () => {
           </Grid>
           {/* Second column */}
           <Grid item xs={12} sm={6} style={{ padding: "0rem 2rem" }}>
-            {/* {isLoading ? (
-            <Loader />
-          ) : (
-            posts?.map((card) => <UserPost posts={card} />)
-          )} */}
+            <ProfileCard />
           </Grid>
           {/* Third column */}
           <Grid

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { userProfileUpdate } from "../../../container/Profile/ProfileSlice";
 
 const Auth = createSlice({
   name: "Auth",
@@ -43,15 +44,14 @@ export const LoginAuth = (credentail) => {
         body: JSON.stringify(credentail),
       });
       dispatch(Loading(false));
-      console.log(credentail, "@@@@@@@@@", res);
       if (!res.ok) {
         dispatch(Error(true));
       } else {
         dispatch(Error(false));
         const data = await res.json();
         localStorage.setItem("token", data.encodedToken);
-        console.log("@@@@data", data);
         dispatch(AuthResponse(data));
+        dispatch(userProfileUpdate(data.foundUser));
       }
     } catch (error) {
       dispatch(Loading(false));

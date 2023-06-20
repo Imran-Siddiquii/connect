@@ -5,7 +5,8 @@ import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import { NavLinkDiv, SidebarIconText } from "../container/style";
 import { Bookmark, FavoriteOutlined } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const StyledAppBar = styled(AppBar)`
   background-color: #4267b2;
@@ -19,6 +20,7 @@ const typoColor = {
 };
 
 const Header = () => {
+  const { profile } = useSelector((state) => state.userProfile);
   return (
     <StyledAppBar>
       <Toolbar>
@@ -29,11 +31,12 @@ const Header = () => {
         </Typography>
 
         <NavLinkDiv to="/profile" style={typoColor}>
+          <Avatar />
           <Typography
             variant="body2"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            user Name
+            {profile.username}
           </Typography>
         </NavLinkDiv>
         <NavLinkDiv to="/bookmark" style={typoColor}>
