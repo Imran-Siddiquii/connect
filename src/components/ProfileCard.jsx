@@ -26,8 +26,16 @@ export const ProfileCard = () => {
   const { isLoading, isError, profile } = useSelector(
     (state) => state.userProfile
   );
-  const { firstName, lastName, username, avatar, followers, following } =
-    profile;
+  const {
+    firstName,
+    lastName,
+    username,
+    userAvatar,
+    bio,
+    portfolio_url,
+    followers,
+    following,
+  } = profile;
   const [open, setOpen] = useState(false);
   const [openEditprofile, setOpenEditprofile] = useState(false);
 
@@ -40,18 +48,30 @@ export const ProfileCard = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", border: "1px solid red" }}>
+    <Box
+      sx={{
+        width: "100%",
+        borderRadius: "5px",
+        margin: "1rem 0rem",
+        boxShadow: "2px 2px 8px 1px #7fbaf5",
+      }}
+    >
       <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 0, md: 0 }}>
-        <Grid item xs={4}>
-          <div style={{ position: "relative" }}>
+        <Grid item xs={4} style={{ marginBottom: "10px" }}>
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
             <Avatar
               alt="Remy Sharp"
-              variant="square"
+              variant="Round"
               style={{ padding: 0, margin: 0 }}
-              //   src="/static/images/avatar/1.jpg"
-              backgroundColor="red"
-              src="Icons_user.png"
-              sx={{ width: 175, height: 150 }}
+              src={userAvatar}
+              // src="Icons_user.png"
+              sx={{ width: 150, height: 160 }}
             />
             <Tooltip title="Edit Avatar">
               <IconButton
@@ -59,7 +79,7 @@ export const ProfileCard = () => {
                 style={{
                   position: "absolute",
                   bottom: 0,
-                  right: "55px",
+                  right: "60px",
                   color: "white",
                   backgroundColor: "#1976d2",
                   borderRadius: "50%",
@@ -72,16 +92,23 @@ export const ProfileCard = () => {
             <AvatarDailog open={open} handleClose={handleClose} />
           </div>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={8} style={{}}>
           <div style={{ position: "relative" }}>
             <Typography variant="h6">{`${firstName}  ${lastName}`}</Typography>
-            <Typography variant="body1"> Username : {username}</Typography>
+            <Typography variant="body1"> @{username}</Typography>
             <Typography variant="body1">
-              Portfolio Url: <a href="https://example.com">example.com</a>
+              Portfolio Url : &nbsp;
+              <a target="_blank" rel="noreferrer" href={`${portfolio_url}`}>
+                {portfolio_url}
+              </a>
             </Typography>
-            <Typography variant="body1">Bio:</Typography>
-            <Typography variant="body1">Followers:</Typography>
-            <Typography variant="body1">Following:</Typography>
+            <Typography variant="body1">Bio : {bio}</Typography>
+            <Typography variant="body1">
+              Followers : {followers[0] || 0}
+            </Typography>
+            <Typography variant="body1">
+              Following : {following[0] || 0}
+            </Typography>
             <Tooltip title="Edit Profile">
               <IconButton
                 onClick={() => setOpenEditprofile(true)}
@@ -101,6 +128,7 @@ export const ProfileCard = () => {
             <EditProfileDialog
               open={openEditprofile}
               handleClose={() => setOpenEditprofile(false)}
+              profile={profile}
             />
           </div>
         </Grid>

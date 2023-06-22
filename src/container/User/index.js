@@ -1,19 +1,16 @@
-import { Container, Grid } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
+import { StyledContainer } from "../Profile";
+import { Grid } from "@mui/material";
 import { Sidebar } from "../Sidebar";
+import BasicTabs from "../../components/UserTab";
 import { RightSidebar } from "../RightSideBar";
-import { styled } from "styled-components";
-import { ProfileCard } from "../../components/ProfileCard";
-import { useDispatch } from "react-redux";
-import { updateAvatar } from "./ProfileSlice";
+import { useParams } from "react-router-dom";
 
-export const Profile = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(updateAvatar("Avataruser.png"));
-  }, []);
+export const Users = () => {
+  const { id } = useParams();
+  console.log("🚀 ~ file: index.js:11 ~ Users ~ id:", id);
   return (
-    <>
+    <div>
       <StyledContainer maxWidth="xl">
         <Grid container>
           {/* First column */}
@@ -28,7 +25,7 @@ export const Profile = () => {
           </Grid>
           {/* Second column */}
           <Grid item xs={12} sm={6} style={{ padding: "0rem 2rem" }}>
-            <ProfileCard />
+            {/* <BasicTabs /> */}
           </Grid>
           {/* Third column */}
           <Grid
@@ -41,12 +38,6 @@ export const Profile = () => {
           </Grid>
         </Grid>
       </StyledContainer>
-    </>
+    </div>
   );
 };
-
-export const StyledContainer = styled(Container)`
-  height: 100vh;
-  margin-top: 4.5rem;
-  padding: 0 !important;
-`;

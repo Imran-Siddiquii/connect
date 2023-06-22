@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchUserPost } from "./container/UserPostContainer/userPostSlice";
+import { Users } from "./container/User";
 
 const theme = createTheme({
   breakpoints: {
@@ -48,6 +49,7 @@ function App() {
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/liked-post" element={<LikedPost />} />
             <Route exact path="/bookmark" element={<Bookmark />} />
+            <Route exact path="/user-profile/:id" element={<Users />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

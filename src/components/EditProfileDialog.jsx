@@ -1,21 +1,13 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  Input,
-  Paper,
-  TextField,
-  TextareaAutosize,
-  styled,
-} from "@mui/material";
+import { Box, Button, Grid, Paper, TextField, styled } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../container/Profile/ProfileSlice";
 
-export default function EditProfileDialog({ open, handleClose }) {
+export default function EditProfileDialog({ open, handleClose, profile }) {
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -25,12 +17,12 @@ export default function EditProfileDialog({ open, handleClose }) {
   }));
 
   const [editProfile, setEditProfile] = useState({
-    name: "",
-    username: "",
-    bio: "",
-    portfolio_url: "",
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    bio: profile?.bio,
+    portfolio_url: profile?.portfolio_url,
   });
-
+  const dispatch = useDispatch();
   const handleChange = (field, value) => {
     setEditProfile((prev) => {
       return {
@@ -42,7 +34,8 @@ export default function EditProfileDialog({ open, handleClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("check");
+
+    dispatch(updateUser({ editProfile }));
   };
   return (
     <div>
@@ -52,7 +45,7 @@ export default function EditProfileDialog({ open, handleClose }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Edit Profiler"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Edit Profile"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <Box sx={{ width: "100%", marginTop: "1rem" }}>
@@ -65,19 +58,24 @@ export default function EditProfileDialog({ open, handleClose }) {
                   <form onSubmit={handleSubmit}>
                     <TextField
                       style={{ marginBottom: "20px" }}
-                      label="Username"
+                      label="firstName"
                       fullWidth
-                      onChange={(e) => handleChange("username", e.target.value)}
+                      value={editProfile?.firstName}
+                      onChange={(e) =>
+                        handleChange("firstName", e.target.value)
+                      }
                     />
                     <TextField
                       style={{ marginBottom: "20px" }}
-                      label="name"
+                      label="lastName"
                       fullWidth
-                      onChange={(e) => handleChange("name", e.target.value)}
+                      value={editProfile.lastName}
+                      onChange={(e) => handleChange("lastName", e.target.value)}
                     />
                     <TextField
                       style={{ marginBottom: "20px" }}
                       label="PortFolio URL"
+                      value={editProfile?.portfolio_url}
                       fullWidth
                       onChange={(e) =>
                         handleChange("portfolio_url", e.target.value)
@@ -86,13 +84,20 @@ export default function EditProfileDialog({ open, handleClose }) {
                     <TextField
                       style={{ marginBottom: "20px" }}
                       id="outlined-multiline-static"
-                      label="Bio"
+                      label="bio"
                       multiline
                       fullWidth
+                      value={editProfile?.bio}
                       rows={4}
-                      defaultValue=" "
                       onChange={(e) => handleChange("bio", e.target.value)}
                     />
+                    <Button
+                      style={{ marginRight: "1rem" }}
+                      onClick={handleClose}
+                      variant="contained"
+                    >
+                      Close
+                    </Button>
                     <Button type="submit" variant="contained">
                       Save
                     </Button>

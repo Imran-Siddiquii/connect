@@ -72,6 +72,8 @@ export const ProfileContainer = styled.div`
 
 export const RightSidebarContainer = styled.div`
   margin: 2rem;
+  position: relative;
+  width: 80%;
 `;
 
 export const RightSidebarItem = styled.div`

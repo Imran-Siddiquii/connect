@@ -3,17 +3,15 @@ import {
   LeftSideContainer,
   NavLinkDiv,
   ProfileContainer,
-  ProfileImage,
   ProfileName,
   SidebarIcon,
   SidebarIconImage,
   SidebarIconText,
   StickyColumn,
 } from "../style";
-import { NavLink } from "react-router-dom";
 import { styled as bookmark } from "styled-components";
 import { Bookmark, FavoriteOutlined, Home } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 // import * as React from "react";
 import PropTypes from "prop-types";
 // import Button from "@mui/material/Button";
@@ -23,6 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomizedDialogs from "../Dialog";
+import { useSelector } from "react-redux";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -63,6 +62,7 @@ BootstrapDialogTitle.propTypes = {
 };
 export const Sidebar = () => {
   const [open, setOpen] = React.useState(false);
+  const { profile } = useSelector((state) => state.userProfile);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,11 +75,21 @@ export const Sidebar = () => {
       <LeftSideContainer>
         <NavLinkDiv to="/profile">
           <ProfileContainer>
-            <ProfileImage
-              src="https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?cs=srgb&dl=pexels-pixabay-268533.jpg&fm=jpg"
-              alt="Profile"
+            <Avatar
+              alt="Remy Sharp"
+              variant="Round"
+              sx={{ width: 50, height: 50 }}
+              style={{
+                padding: 0,
+                marginRight: "15px",
+                cursor: "pointer",
+                display: "flex",
+              }}
+              src={profile?.userAvatar}
             />
-            <ProfileName>John Doe</ProfileName>
+            <ProfileName>
+              {profile.firstName} {profile.lastName}
+            </ProfileName>
           </ProfileContainer>
         </NavLinkDiv>
         <NavLinkDiv to="/">
@@ -115,40 +125,6 @@ export const Sidebar = () => {
           title={"Create a post"}
           postButtonText={"Post"}
         />
-        {/* <BootstrapDialog
-          onClose={handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={open}
-        >
-          <BootstrapDialogTitle
-            id="customized-dialog-title"
-            onClose={handleClose}
-          >
-            Modal title
-          </BootstrapDialogTitle>
-          <DialogContent dividers>
-            <Typography gutterBottom>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </Typography>
-            <Typography gutterBottom>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur
-              et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-              auctor.
-            </Typography>
-            <Typography gutterBottom>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-              cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-              dui. Donec ullamcorper nulla non metus auctor fringilla.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={handleClose}>
-              Save changes
-            </Button>
-          </DialogActions>
-        </BootstrapDialog> */}
       </LeftSideContainer>
     </StickyColumn>
   );

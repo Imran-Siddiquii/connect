@@ -35,7 +35,7 @@ export const Bookmark = () => {
           </Grid>
           {/* Second column */}
           <Grid item xs={12} sm={6} style={{ padding: "0rem 2rem" }}>
-            {bookmarkPost.length === 0 ? (
+            {bookmarkPost?.length === 0 ? (
               <div style={{ textAlign: "center" }}>
                 <h3>No Post In Bookmark </h3>
                 <NavLink to="/">
@@ -46,7 +46,7 @@ export const Bookmark = () => {
             {loading ? (
               <Loader />
             ) : (
-              bookmarkPost.map((card) => (
+              bookmarkPost?.map((card) => (
                 <UserPost posts={card} removeBookmark />
               ))
             )}

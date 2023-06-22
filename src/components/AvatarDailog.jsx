@@ -3,8 +3,11 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { updateAvatar } from "../container/Profile/ProfileSlice";
+import { useDispatch } from "react-redux";
 
 export default function AvatarDailog({ open, handleClose }) {
+  const dispatch = useDispatch();
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -35,6 +38,10 @@ export default function AvatarDailog({ open, handleClose }) {
       Avatar: "Icons_user.png",
     },
   ];
+  const handleAvatarChange = (avatar) => {
+    dispatch(updateAvatar(avatar));
+    handleClose();
+  };
   return (
     <div>
       <Dialog
@@ -60,7 +67,7 @@ export default function AvatarDailog({ open, handleClose }) {
                       style={{ padding: 0, margin: 0, cursor: "pointer" }}
                       src={avatar.Avatar}
                       sx={{ width: 175, height: 130 }}
-                      onClick={() => console.log(avatar.Avatar)}
+                      onClick={() => handleAvatarChange(avatar.Avatar)}
                     />
                   </Grid>
                 ))}

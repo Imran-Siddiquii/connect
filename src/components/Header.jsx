@@ -3,7 +3,12 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
-import { NavLinkDiv, SidebarIconText } from "../container/style";
+import {
+  NavLinkDiv,
+  ProfileContainer,
+  ProfileName,
+  SidebarIconText,
+} from "../container/style";
 import { Bookmark, FavoriteOutlined } from "@mui/icons-material";
 import { Avatar, Button } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -31,13 +36,22 @@ const Header = () => {
         </Typography>
 
         <NavLinkDiv to="/profile" style={typoColor}>
-          <Avatar />
-          <Typography
-            variant="body2"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            {profile.username}
-          </Typography>
+          <ProfileContainer style={{ marginBottom: "0rem" }}>
+            <Avatar
+              alt="Remy Sharp"
+              variant="Round"
+              style={{
+                padding: 0,
+                marginRight: "15px",
+                cursor: "pointer",
+                display: "flex",
+              }}
+              src={profile.userAvatar}
+            />
+            <ProfileName>
+              {profile.firstName} {profile.lastName}
+            </ProfileName>
+          </ProfileContainer>
         </NavLinkDiv>
         <NavLinkDiv to="/bookmark" style={typoColor}>
           <Typography
