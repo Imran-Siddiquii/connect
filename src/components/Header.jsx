@@ -12,6 +12,7 @@ import {
 import { Bookmark, FavoriteOutlined } from "@mui/icons-material";
 import { Avatar, Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const StyledAppBar = styled(AppBar)`
   background-color: #4267b2;
@@ -26,6 +27,7 @@ const typoColor = {
 
 const Header = () => {
   const { profile } = useSelector((state) => state.userProfile);
+  const navigate = useNavigate();
   return (
     <StyledAppBar>
       <Toolbar>
@@ -81,7 +83,10 @@ const Header = () => {
         <Button
           variant="outlined"
           style={{ background: "white", margin: "0 1rem" }}
-          onClick={() => localStorage.removeItem("token")}
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/login");
+          }}
         >
           <SidebarIconText>Logout</SidebarIconText>
         </Button>

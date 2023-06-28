@@ -1,7 +1,6 @@
 import React from "react";
 import {
   UserPostAction,
-  UserPostActionButton,
   UserPostActions,
   UserPostContainer,
   UserPostContent,
@@ -15,15 +14,14 @@ import {
   Bookmark,
   BookmarkAddOutlined,
   BookmarkRemoveOutlined,
-  ThumbDown,
-  ThumbUp,
+  Favorite,
+  FavoriteBorder,
 } from "@mui/icons-material";
 import { Box, Button, Grid, Paper, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import {
   addToBookmarkPost,
-  dislikePost,
   likePost,
   removeToBookmarkPost,
 } from "./userPostSlice";
@@ -112,41 +110,28 @@ export const UserPost = ({ posts, removeBookmark, handleRemoveBookmark }) => {
       />
       <UserPostActions>
         <UserPostAction>
-          <ThumbUp color="primary" />{" "}
+          <Favorite color="primary" />
           <span> {posts.likes?.likedBy?.[0]?.username}</span>{" "}
           {posts.likes?.likeCount} Likes
         </UserPostAction>
       </UserPostActions>
-      <UserPostActions>
-        <UserPostAction>
-          <ThumbDown color="warning" />{" "}
-          <span> {posts.likes?.dislikedBy?.[0]?.username}</span>{" "}
-          {posts.likes?.dislikeCount} dislikes
-        </UserPostAction>
-      </UserPostActions>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4} columns={16}>
-          <Grid item xs={8}>
+          <Grid item xs={16}>
             <Item>
-              <Button
-                style={{ width: "100%" }}
-                onClick={() => dispatch(likePost(posts))}
-                startIcon={<ThumbUp />}
-              >
-                Like
-              </Button>
-            </Item>
-          </Grid>
-          <Grid item xs={8}>
-            <Item>
-              <Button
-                onClick={() => dispatch(dislikePost(posts))}
-                color="warning"
-                style={{ width: "100%" }}
-                startIcon={<ThumbDown />}
-              >
-                Dislike
-              </Button>
+              {posts.isLike ? (
+                <Button style={{ width: "100%" }} startIcon={<Favorite />}>
+                  Liked
+                </Button>
+              ) : (
+                <Button
+                  style={{ width: "100%" }}
+                  onClick={() => dispatch(likePost(posts))}
+                  startIcon={<FavoriteBorder />}
+                >
+                  Like
+                </Button>
+              )}
             </Item>
           </Grid>
         </Grid>

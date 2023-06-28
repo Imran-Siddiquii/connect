@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
+  NavLinkDiv,
   RightSidebarContainer,
   RightSidebarItem,
   StickyColumn,
@@ -7,8 +8,14 @@ import {
 import { Avatar, Button, Grid } from "@mui/material";
 import { styled } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserList } from "../User/UserSlice";
+import {
+  followUser,
+  unfollowUser,
+  userFollow,
+  userUnfollow,
+} from "../User/UserSlice";
 import { NavLink } from "react-router-dom";
+import { followCount, unfollowCount } from "../Profile/ProfileSlice";
 
 const ImageWrapper = styled.div`
   display: flex;
@@ -22,47 +29,67 @@ const ImageWrapper = styled.div`
 export const RightSidebar = () => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.userList);
-  useEffect(() => {
-    dispatch(fetchUserList());
-  }, []);
+  const { profile } = useSelector((state) => state.userProfile);
   const handleFollow = (e, id) => {
     e.preventDefault();
-    console.log("🚀 ~ file: index.js:29 ~ handleFollow ~ e:", id);
+    dispatch(followUser(id));
+    dispatch(userFollow(id));
+    dispatch(followCount());
   };
+  const handleUnfollow = (e, id) => {
+    e.preventDefault();
+    dispatch(userUnfollow(id));
+    dispatch(unfollowUser(id));
+    dispatch(unfollowCount());
+  };
+
   return (
     <>
       <StickyColumn style={{ boxShadow: "-2px -2px 8px 1px #7fbaf5" }}>
         <RightSidebarContainer>
-          {users.map((user) => (
-            <>
-              <NavLink to={`/user-profile/${user._id}`} key={user._id}>
-                <RightSidebarItem>
-                  <Grid container alignItems="center" mb={3} spacing={2}>
-                    <Grid item>
-                      <ImageWrapper>
-                        <Avatar src={user.avatar} />
-                      </ImageWrapper>
+          {users.map((user) =>
+            profile._id == user._id ? null : (
+              <>
+                <NavLinkDiv to={`/user-profile/${user._id}`} key={user._id}>
+                  <RightSidebarItem>
+                    <Grid container alignItems="center" mb={3} spacing={2}>
+                      <Grid item>
+                        <ImageWrapper>
+                          <Avatar src={user.avatar} />
+                        </ImageWrapper>
+                      </Grid>
+                      <Grid item xs>
+                        <div>
+                          {user.firstName} {user.lastName}
+                        </div>
+                        <small>{user.username}</small>
+                      </Grid>
+                      <Grid item>
+                        {user?.isFollow ? (
+                          <Button
+                            variant="button"
+                            color="primary"
+                            style={{ cursor: "default" }}
+                            onClick={(e) => handleUnfollow(e, user._id)}
+                          >
+                            Unfollow
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={(e) => handleFollow(e, user._id)}
+                          >
+                            Follow
+                          </Button>
+                        )}
+                      </Grid>
                     </Grid>
-                    <Grid item xs>
-                      <div>
-                        {user.firstName} {user.lastName}
-                      </div>
-                      <small>{user.username}</small>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={(e) => handleFollow(e, user._id)}
-                      >
-                        Follow
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </RightSidebarItem>
-              </NavLink>
-            </>
-          ))}
+                  </RightSidebarItem>
+                </NavLinkDiv>
+              </>
+            )
+          )}
         </RightSidebarContainer>
       </StickyColumn>
     </>

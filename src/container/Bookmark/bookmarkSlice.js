@@ -26,6 +26,7 @@ export const { load, error, bookmark } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
 
 export const fetchBookmark = () => {
+  console.log("hkjabdvhbdh");
   return async function getList(dispatch) {
     dispatch(load(true));
 
@@ -37,6 +38,7 @@ export const fetchBookmark = () => {
       };
       const res = await fetch("/api/users/bookmark", options);
       const data = await res.json();
+      console.log("🚀 ~ file: bookmarkSlice.js:40 ~ getList ~ data:", data);
       dispatch(bookmark(data.bookmarks));
       dispatch(load(false));
     } catch (err) {
@@ -58,6 +60,7 @@ export const AddBookmark = (_id) => {
     try {
       const res = await fetch(`/api/users/bookmark/${_id}`, options);
       const data = await res.json();
+      console.log("🚀 ~ file: bookmarkSlice.js:61 ~ addItem ~ data:", data);
       dispatch(load(false));
     } catch (err) {
       dispatch(load(false));

@@ -35,6 +35,18 @@ const ProfileSlice = createSlice({
         portfolio_url: payload.portfolio_url,
       };
     },
+    followCount: (state, { payload }) => {
+      state.profile = {
+        ...state.profile,
+        following: state.profile.following + 1,
+      };
+    },
+    unfollowCount: (state, { payload }) => {
+      state.profile = {
+        ...state.profile,
+        following: state.profile.following - 1,
+      };
+    },
   },
 });
 
@@ -44,6 +56,8 @@ export const {
   userProfileUpdate,
   updateAvatar,
   updateUserDetails,
+  followCount,
+  unfollowCount,
 } = ProfileSlice.actions;
 export default ProfileSlice.reducer;
 

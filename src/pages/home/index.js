@@ -3,9 +3,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { Sidebar } from "../../container/Sidebar";
 import { RightSidebar } from "../../container/RightSideBar";
-import { useEffect } from "react";
-import { fetchUserPost } from "../../container/UserPostContainer/userPostSlice";
-import { useDispatch } from "react-redux";
 import BasicTabs from "../../components/UserTab";
 
 export const Home = () => {

@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchUserPost } from "./container/UserPostContainer/userPostSlice";
 import { Users } from "./container/User";
+import { fetchUserList } from "./container/User/UserSlice";
 
 const theme = createTheme({
   breakpoints: {
@@ -28,6 +29,7 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUserPost());
+    dispatch(fetchUserList());
   }, []);
   return (
     <>

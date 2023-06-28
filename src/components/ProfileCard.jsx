@@ -1,7 +1,6 @@
 import { Edit } from "@mui/icons-material";
 import {
   Avatar,
-  Badge,
   Box,
   Grid,
   IconButton,
@@ -95,7 +94,7 @@ export const ProfileCard = () => {
         <Grid item xs={8} style={{}}>
           <div style={{ position: "relative" }}>
             <Typography variant="h6">{`${firstName}  ${lastName}`}</Typography>
-            <Typography variant="body1"> @{username}</Typography>
+            <Typography variant="body1"> {username}</Typography>
             <Typography variant="body1">
               Portfolio Url : &nbsp;
               <a target="_blank" rel="noreferrer" href={`${portfolio_url}`}>
@@ -103,12 +102,8 @@ export const ProfileCard = () => {
               </a>
             </Typography>
             <Typography variant="body1">Bio : {bio}</Typography>
-            <Typography variant="body1">
-              Followers : {followers[0] || 0}
-            </Typography>
-            <Typography variant="body1">
-              Following : {following[0] || 0}
-            </Typography>
+            <Typography variant="body1">Followers : {followers}</Typography>
+            <Typography variant="body1">Following : {following}</Typography>
             <Tooltip title="Edit Profile">
               <IconButton
                 onClick={() => setOpenEditprofile(true)}

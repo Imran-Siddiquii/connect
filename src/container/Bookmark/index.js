@@ -13,6 +13,7 @@ export const Bookmark = () => {
   const { loading, error, bookmarkPost } = useSelector(
     (state) => state.bookmark
   );
+  const { posts, isLoading, isError } = useSelector((state) => state.posts);
 
   const dispatch = useDispatch();
 
@@ -46,9 +47,11 @@ export const Bookmark = () => {
             {loading ? (
               <Loader />
             ) : (
-              bookmarkPost?.map((card) => (
-                <UserPost posts={card} removeBookmark />
-              ))
+              posts?.map((card) =>
+                card.isBookmark ? (
+                  <UserPost posts={card} removeBookmark />
+                ) : null
+              )
             )}
           </Grid>
           {/* Third column */}

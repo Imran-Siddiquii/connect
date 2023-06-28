@@ -4,11 +4,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import PhoneIcon from "@mui/icons-material/Phone";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import { UserPost } from "../container/UserPostContainer";
-import { NewReleases, TrendingUp } from "@mui/icons-material";
+import { Feed, Home, NewReleases, TrendingUp } from "@mui/icons-material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +45,6 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const { posts, isLoading, isError } = useSelector((state) => state.posts);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -63,20 +61,26 @@ export default function BasicTabs() {
           }}
         >
           <Tab
-            style={{ width: "50%" }}
+            style={{ width: "33.33%" }}
+            icon={<Feed />}
+            iconPosition="start"
+            label="User Feed"
+            {...a11yProps(0)}
+          />
+          <Tab
             icon={<NewReleases />}
             iconPosition="start"
-            label="latest"
-            {...a11yProps(0)}
+            style={{ width: "33.34%" }}
+            label="Latest"
+            {...a11yProps(2)}
           />
           <Tab
             icon={<TrendingUp />}
             iconPosition="start"
-            style={{ width: "50%" }}
+            style={{ width: "33.33%" }}
             label="Trending"
             {...a11yProps(1)}
           />
-          {/* <Tab style={{ width: "34%" }} label="Item Three" {...a11yProps(2)} /> */}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -84,6 +88,16 @@ export default function BasicTabs() {
           <Loader />
         ) : (
           posts?.map((card) => <UserPost key={card.id} posts={card} />)
+        )}
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          posts
+            ?.slice()
+            ?.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            .map((card) => <UserPost key={card.id} posts={card} />)
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -98,8 +112,4 @@ export default function BasicTabs() {
       </TabPanel>
     </Box>
   );
-}
-
-{
-  /* ?.sort((a, b) => b?.likes?.likeCount - a?.likes?.likeCount) */
 }
