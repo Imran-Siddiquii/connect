@@ -55,7 +55,7 @@ export const RightSidebar = () => {
                     <Grid container alignItems="center" mb={3} spacing={2}>
                       <Grid item>
                         <ImageWrapper>
-                          <Avatar src={user.avatar} />
+                          <Avatar src={process.env.PUBLIC_URL + user?.avatar} />
                         </ImageWrapper>
                       </Grid>
                       <Grid item xs>

@@ -15,9 +15,19 @@ import {
   UserCardContainer,
   UserCardContent,
   UserCardHeader,
-  UserCardProfileImage,
   UserCardProfileName,
 } from "./style";
+import { v4 as uuid } from "uuid";
+import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import {
+  addUserPost,
+  updateUserPost,
+} from "../UserPostContainer/userPostSlice";
+import { Avatar } from "@mui/material";
+import { useState } from "react";
+
+const formatDate = () => dayjs().format("YYYY-MM-DDTHH:mm:ssZ");
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -62,7 +72,66 @@ export default function CustomizedDialogs({
   handleClose,
   title,
   postButtonText,
+  profile,
+  posts,
 }) {
+  const [userContent, setUserContent] = useState(posts?.content);
+  const [userContentImage, setUserContentImage] = useState(posts?.postImageUrl);
+  const [toggleImage, setToggleImage] = useState(
+    posts?.content ? "uploaded" : "initial"
+  );
+  const { username, firstName, lastName, avatar } = profile;
+  const dispatch = useDispatch();
+
+  const handlePostContent = (e) => {
+    setUserContent(e.target.value);
+  };
+  const handleUploadClick = (event) => {
+    var file = event.target.files[0];
+    const reader = new FileReader();
+    var url = reader.readAsDataURL(file);
+    reader.onloadend = function (e) {
+      setUserContentImage([reader.result]);
+    };
+
+    setToggleImage("uploaded");
+    setUserContentImage(event.target.files[0]);
+  };
+  const handleToggle = () => {
+    setToggleImage("initial");
+  };
+  const imageResetHandler = () => {
+    setToggleImage("initial");
+    setUserContentImage(null);
+  };
+
+  const addPost = () => {
+    const addUserPostValue = {
+      _id: posts ? posts._id : uuid(),
+      content: userContent,
+      postImageUrl: userContentImage,
+      userImage: avatar,
+      likes: {
+        dislikeCount: 0,
+        likeCount: 0,
+        likedBy: [],
+        dislikedBy: [],
+      },
+      username: username,
+      name: `${firstName} ${lastName}`,
+      createdAt: formatDate(),
+      updatedAt: formatDate(),
+    };
+    if (postButtonText !== "Post") {
+      dispatch(updateUserPost(addUserPostValue));
+    } else {
+      dispatch(addUserPost(addUserPostValue));
+    }
+    handleClose();
+    setToggleImage("initial");
+    setUserContentImage(null);
+    setUserContent(null);
+  };
   return (
     <div>
       <BootstrapDialog
@@ -79,11 +148,20 @@ export default function CustomizedDialogs({
         <DialogContent dividers>
           <UserCardContainer>
             <UserCardHeader>
-              <UserCardProfileImage
-                src="https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?cs=srgb&dl=pexels-pixabay-268533.jpg&fm=jpg"
-                alt="Profile"
+              <Avatar
+                alt="Remy Sharp"
+                variant="Round"
+                style={{
+                  padding: 0,
+                  marginRight: "15px",
+                  cursor: "pointer",
+                  display: "flex",
+                }}
+                src={avatar}
               />
-              <UserCardProfileName>John Doe</UserCardProfileName>
+              <UserCardProfileName>
+                {firstName} {lastName}
+              </UserCardProfileName>
             </UserCardHeader>
             <UserCardContent>
               <textarea
@@ -97,20 +175,30 @@ export default function CustomizedDialogs({
                   outline: "none",
                   overflow: "hidden",
                 }}
+                value={userContent}
+                onChange={handlePostContent}
               />
             </UserCardContent>
             <UserCardActions>
               <UserCardActionButton>
-                <img
-                  src="https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?cs=srgb&dl=pexels-pixabay-268533.jpg&fm=jpg"
-                  alt="Phot"
+                <Avatar
+                  alt="Remy Sharp"
+                  variant="Round"
                   style={{
-                    width: "20px",
-                    height: "20px",
-                    marginRight: "8px",
+                    padding: 0,
+                    marginRight: "15px",
+                    cursor: "pointer",
+                    display: "flex",
                   }}
+                  src={avatar}
                 />
-                <ImageUploadCard />
+                <ImageUploadCard
+                  toggleImage={toggleImage}
+                  handleToggle={handleToggle}
+                  userContentImage={userContentImage}
+                  handleUploadClick={handleUploadClick}
+                  imageResetHandler={imageResetHandler}
+                />
                 Photo/Video
               </UserCardActionButton>
             </UserCardActions>
@@ -120,7 +208,7 @@ export default function CustomizedDialogs({
           <Button variant="contained" autoFocus onClick={() => handleClose()}>
             Cancel
           </Button>
-          <Button variant="contained" autoFocus onClick={() => handleClose()}>
+          <Button variant="contained" autoFocus onClick={() => addPost()}>
             {postButtonText}
           </Button>
         </DialogActions>

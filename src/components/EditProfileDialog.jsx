@@ -58,7 +58,7 @@ export default function EditProfileDialog({ open, handleClose, profile }) {
                   <form onSubmit={handleSubmit}>
                     <TextField
                       style={{ marginBottom: "20px" }}
-                      label="firstName"
+                      label="First Name"
                       fullWidth
                       value={editProfile?.firstName}
                       onChange={(e) =>
@@ -67,14 +67,14 @@ export default function EditProfileDialog({ open, handleClose, profile }) {
                     />
                     <TextField
                       style={{ marginBottom: "20px" }}
-                      label="lastName"
+                      label="Last Name"
                       fullWidth
                       value={editProfile.lastName}
                       onChange={(e) => handleChange("lastName", e.target.value)}
                     />
                     <TextField
                       style={{ marginBottom: "20px" }}
-                      label="PortFolio URL"
+                      label="Portfolio Url"
                       value={editProfile?.portfolio_url}
                       fullWidth
                       onChange={(e) =>
@@ -84,7 +84,7 @@ export default function EditProfileDialog({ open, handleClose, profile }) {
                     <TextField
                       style={{ marginBottom: "20px" }}
                       id="outlined-multiline-static"
-                      label="bio"
+                      label="Bio"
                       multiline
                       fullWidth
                       value={editProfile?.bio}

@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import AvatarDailog from "./AvatarDailog";
-import { useSelector } from "react-redux";
 import EditProfileDialog from "./EditProfileDialog";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -21,15 +20,12 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-export const ProfileCard = () => {
-  const { isLoading, isError, profile } = useSelector(
-    (state) => state.userProfile
-  );
+export const ProfileCard = ({ profile, edit }) => {
   const {
     firstName,
     lastName,
     username,
-    userAvatar,
+    avatar,
     bio,
     portfolio_url,
     followers,
@@ -68,26 +64,27 @@ export const ProfileCard = () => {
               alt="Remy Sharp"
               variant="Round"
               style={{ padding: 0, margin: 0 }}
-              src={userAvatar}
-              // src="Icons_user.png"
+              src={avatar}
               sx={{ width: 150, height: 160 }}
             />
-            <Tooltip title="Edit Avatar">
-              <IconButton
-                onClick={() => handleClickOpen()}
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: "60px",
-                  color: "white",
-                  backgroundColor: "#1976d2",
-                  borderRadius: "50%",
-                  zIndex: 1,
-                }}
-              >
-                <Edit />
-              </IconButton>
-            </Tooltip>
+            {edit ? (
+              <Tooltip title="Edit Avatar">
+                <IconButton
+                  onClick={() => handleClickOpen()}
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: "60px",
+                    color: "white",
+                    backgroundColor: "#1976d2",
+                    borderRadius: "50%",
+                    zIndex: 1,
+                  }}
+                >
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+            ) : null}
             <AvatarDailog open={open} handleClose={handleClose} />
           </div>
         </Grid>
@@ -104,22 +101,24 @@ export const ProfileCard = () => {
             <Typography variant="body1">Bio : {bio}</Typography>
             <Typography variant="body1">Followers : {followers}</Typography>
             <Typography variant="body1">Following : {following}</Typography>
-            <Tooltip title="Edit Profile">
-              <IconButton
-                onClick={() => setOpenEditprofile(true)}
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: "55px",
-                  color: "white",
-                  backgroundColor: "#1976d2",
-                  borderRadius: "50%",
-                  zIndex: 1,
-                }}
-              >
-                <Edit />
-              </IconButton>
-            </Tooltip>
+            {edit ? (
+              <Tooltip title="Edit Profile">
+                <IconButton
+                  onClick={() => setOpenEditprofile(true)}
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: "55px",
+                    color: "white",
+                    backgroundColor: "#1976d2",
+                    borderRadius: "50%",
+                    zIndex: 1,
+                  }}
+                >
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+            ) : null}
             <EditProfileDialog
               open={openEditprofile}
               handleClose={() => setOpenEditprofile(false)}

@@ -20,10 +20,13 @@ const ProfileSlice = createSlice({
       state.isError = payload;
       state.isLoading = false;
     },
+    clearUserDetail: (state, { payload }) => {
+      state.profile = [];
+    },
 
     updateAvatar: (state, { payload }) => {
       state.isLoading = true;
-      state.profile = { ...state.profile, userAvatar: payload };
+      state.profile = { ...state.profile, avatar: payload };
       state.isLoading = false;
     },
     updateUserDetails: (state, { payload }) => {
@@ -58,6 +61,7 @@ export const {
   updateUserDetails,
   followCount,
   unfollowCount,
+  clearUserDetail,
 } = ProfileSlice.actions;
 export default ProfileSlice.reducer;
 

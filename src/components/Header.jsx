@@ -11,8 +11,10 @@ import {
 } from "../container/style";
 import { Bookmark, FavoriteOutlined } from "@mui/icons-material";
 import { Avatar, Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Logout } from "../pages/Auth/Reducer";
+import { clearUserDetail } from "../container/Profile/ProfileSlice";
 
 const StyledAppBar = styled(AppBar)`
   background-color: #4267b2;
@@ -27,7 +29,10 @@ const typoColor = {
 
 const Header = () => {
   const { profile } = useSelector((state) => state.userProfile);
+  const { token } = useSelector((state) => state.Auth);
+  const Auth = localStorage.getItem("token");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <StyledAppBar>
       <Toolbar>
@@ -39,20 +44,24 @@ const Header = () => {
 
         <NavLinkDiv to="/profile" style={typoColor}>
           <ProfileContainer style={{ marginBottom: "0rem" }}>
-            <Avatar
-              alt="Remy Sharp"
-              variant="Round"
-              style={{
-                padding: 0,
-                marginRight: "15px",
-                cursor: "pointer",
-                display: "flex",
-              }}
-              src={profile.userAvatar}
-            />
-            <ProfileName>
-              {profile.firstName} {profile.lastName}
-            </ProfileName>
+            {profile.firstName ? (
+              <>
+                <Avatar
+                  alt="Remy Sharp"
+                  variant="Round"
+                  style={{
+                    padding: 0,
+                    marginRight: "15px",
+                    cursor: "pointer",
+                    display: "flex",
+                  }}
+                  src={profile.avatar}
+                />
+                <ProfileName>
+                  {profile.firstName} {profile.lastName}
+                </ProfileName>
+              </>
+            ) : null}
           </ProfileContainer>
         </NavLinkDiv>
         <NavLinkDiv to="/bookmark" style={typoColor}>
@@ -80,16 +89,30 @@ const Header = () => {
             <SidebarIconText>Post</SidebarIconText>
           </Button>
         </Typography>
-        <Button
-          variant="outlined"
-          style={{ background: "white", margin: "0 1rem" }}
-          onClick={() => {
-            localStorage.removeItem("token");
-            navigate("/login");
-          }}
-        >
-          <SidebarIconText>Logout</SidebarIconText>
-        </Button>
+        {Auth || token ? (
+          <Button
+            variant="outlined"
+            style={{ background: "white", margin: "0 1rem" }}
+            onClick={() => {
+              dispatch(Logout());
+              dispatch(clearUserDetail());
+              localStorage.removeItem("token");
+              navigate("/login");
+            }}
+          >
+            <SidebarIconText>Logout</SidebarIconText>
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            style={{ background: "white", margin: "0 1rem" }}
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            <SidebarIconText>Signin</SidebarIconText>
+          </Button>
+        )}
       </Toolbar>
     </StyledAppBar>
   );

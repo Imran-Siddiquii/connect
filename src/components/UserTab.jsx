@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import { UserPost } from "../container/UserPostContainer";
-import { Feed, Home, NewReleases, TrendingUp } from "@mui/icons-material";
+import { Feed, NewReleases, TrendingUp } from "@mui/icons-material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -72,14 +72,14 @@ export default function BasicTabs() {
             iconPosition="start"
             style={{ width: "33.34%" }}
             label="Latest"
-            {...a11yProps(2)}
+            {...a11yProps(1)}
           />
           <Tab
             icon={<TrendingUp />}
             iconPosition="start"
             style={{ width: "33.33%" }}
             label="Trending"
-            {...a11yProps(1)}
+            {...a11yProps(2)}
           />
         </Tabs>
       </Box>
@@ -90,23 +90,26 @@ export default function BasicTabs() {
           posts?.map((card) => <UserPost key={card.id} posts={card} />)
         )}
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          posts
-            ?.slice()
-            ?.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-            .map((card) => <UserPost key={card.id} posts={card} />)
-        )}
-      </TabPanel>
       <TabPanel value={value} index={1}>
         {isLoading ? (
           <Loader />
         ) : (
           posts
             ?.slice()
-            ?.sort((a, b) => b?.likes?.likeCount - a?.likes?.likeCount)
+            ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .map((card) => <UserPost key={card.id} posts={card} />)
+        )}
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          posts
+            ?.slice()
+            ?.sort(
+              (a, b) =>
+                Number(b?.likes?.likeCount) - Number(a?.likes?.likeCount)
+            )
             .map((card) => <UserPost key={card.id} posts={card} />)
         )}
       </TabPanel>

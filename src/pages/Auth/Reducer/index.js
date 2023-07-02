@@ -26,7 +26,7 @@ const Auth = createSlice({
       state.token = payload.encodedToken;
     },
     Logout: (state) => {
-      state.data = [];
+      state.data = null;
       state.token = null;
     },
   },
@@ -70,13 +70,12 @@ export const signInAuth = (credentail) => {
         body: JSON.stringify(credentail),
       });
       dispatch(Loading(false));
-      console.log(res, "@@@@@@@@");
+
       if (!res.ok) {
         dispatch(Error(true));
       } else {
         dispatch(Error(false));
         const data = await res.json();
-        console.log(data, "@@@@@@@@data");
         dispatch(AuthResponse(data));
         localStorage.setItem("token", data.encodedToken);
       }

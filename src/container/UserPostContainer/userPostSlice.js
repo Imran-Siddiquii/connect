@@ -86,6 +86,39 @@ const userPostSlice = createSlice({
       });
       state.posts = unbookmark;
     },
+    addUserPost: (state, { payload }) => {
+      state.posts = [...state.posts, payload];
+    },
+    updateUserPost: (state, { payload }) => {
+      state.isLoading = true;
+      const updateItem = state.posts.map((ele) => {
+        if (ele._id === payload._id) {
+          return {
+            content: payload.content,
+            createdAt: payload.createdAt,
+            likes: {
+              dislikeCount: payload.likes.dislikeCount,
+              likeCount: payload.likes.likeCount,
+              likedBy: payload.likes.likedBy,
+              dislikedBy: payload.likes.dislikedBy,
+            },
+            name: payload.name,
+            postImageUrl: payload.postImageUrl,
+            updatedAt: payload.updatedAt,
+            userImage: payload.userImage,
+            username: payload.username,
+            _id: payload._id,
+          };
+        } else {
+          return ele;
+        }
+      });
+      state.posts = updateItem;
+      state.isLoading = false;
+    },
+    deleteUserPost: (state, { payload }) => {
+      state.posts = state.posts.filter((ele) => ele._id !== payload);
+    },
   },
 });
 
@@ -97,6 +130,9 @@ export const {
   dislikePost,
   addToBookmarkPost,
   removeToBookmarkPost,
+  deleteUserPost,
+  updateUserPost,
+  addUserPost,
 } = userPostSlice.actions;
 export default userPostSlice.reducer;
 

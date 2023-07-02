@@ -11,7 +11,7 @@ export const users = [
     firstName: "Imran",
     lastName: "Sidd",
     username: "@imran",
-    avatar: "Icon_user.png",
+    avatar: "Cons_user.png",
     password: "imran123",
     createdAt: formatDate(),
     updatedAt: formatDate(),

@@ -24,9 +24,7 @@ export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const dispatch = useDispatch();
-  const { isLoading, token, isError, data } = useSelector(
-    (state) => state.Auth
-  );
+  const { isLoading, token } = useSelector((state) => state.Auth);
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -98,7 +98,6 @@ export const Login = () => {
     if (Object.keys(newErrors).length === 0) {
       // Form submission logic here
       dispatch(LoginAuth({ username, password }));
-      console.log("Form submitted");
     }
   };
 

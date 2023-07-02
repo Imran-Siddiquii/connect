@@ -40,6 +40,7 @@ export const UserPostProfileImage = styled.img`
 export const UserPostProfileName = styled.div`
   font-weight: bold;
   font-size: 14px;
+  padding-left: 1rem;
 `;
 
 export const UserPostActions = styled.div`

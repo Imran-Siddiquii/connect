@@ -4,14 +4,15 @@ import { Sidebar } from "../Sidebar";
 import { RightSidebar } from "../RightSideBar";
 import { styled } from "styled-components";
 import { ProfileCard } from "../../components/ProfileCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateAvatar } from "./ProfileSlice";
+import { UserPost } from "../UserPostContainer";
+import Loader from "../../components/Loader";
+import { CreatePost } from "../../components/CreatePost";
 
 export const Profile = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(updateAvatar("Avataruser.png"));
-  }, []);
+  const { posts, isLoading, isError } = useSelector((state) => state.posts);
+  const { profile } = useSelector((state) => state.userProfile);
   return (
     <>
       <StyledContainer maxWidth="xl">
@@ -28,7 +29,27 @@ export const Profile = () => {
           </Grid>
           {/* Second column */}
           <Grid item xs={12} sm={6} style={{ padding: "0rem 2rem" }}>
-            <ProfileCard />
+            <ProfileCard profile={profile} edit={true} />
+            {Boolean(
+              posts?.slice()?.filter((ele) => ele.username == profile.username)
+                .length
+            ) ? null : (
+              <div style={{ textAlign: "center", marginTop: "3rem" }}>
+                <h3>You haven't post anything </h3>
+                <CreatePost button={true} />
+              </div>
+            )}
+            {isLoading ? (
+              <Loader />
+            ) : (
+              posts
+                ?.slice()
+                ?.filter((ele) => ele.username == profile.username)
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((card) => (
+                  <UserPost key={card.id} posts={card} postEdit={true} />
+                ))
+            )}
           </Grid>
           {/* Third column */}
           <Grid

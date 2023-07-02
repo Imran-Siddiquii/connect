@@ -13,6 +13,8 @@ import { useDispatch } from "react-redux";
 import { fetchUserPost } from "./container/UserPostContainer/userPostSlice";
 import { Users } from "./container/User";
 import { fetchUserList } from "./container/User/UserSlice";
+import { Sidebar } from "./container/Sidebar";
+import { RightSidebar } from "./container/RightSideBar";
 
 const theme = createTheme({
   breakpoints: {
@@ -49,7 +51,6 @@ function App() {
             />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/profile" element={<Profile />} />
-            <Route exact path="/liked-post" element={<LikedPost />} />
             <Route exact path="/bookmark" element={<Bookmark />} />
             <Route exact path="/user-profile/:id" element={<Users />} />
           </Routes>

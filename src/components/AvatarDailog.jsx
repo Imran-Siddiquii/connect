@@ -35,7 +35,7 @@ export default function AvatarDailog({ open, handleClose }) {
       Avatar: "Computer-icons-.png",
     },
     {
-      Avatar: "Icons_user.png",
+      Avatar: "Cons_user.png",
     },
   ];
   const handleAvatarChange = (avatar) => {

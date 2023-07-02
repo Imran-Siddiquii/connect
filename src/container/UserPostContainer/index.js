@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   UserPostAction,
   UserPostActions,
@@ -14,18 +14,32 @@ import {
   Bookmark,
   BookmarkAddOutlined,
   BookmarkRemoveOutlined,
+  Delete,
+  Edit,
   Favorite,
   FavoriteBorder,
+  MoreVert,
 } from "@mui/icons-material";
-import { Box, Button, Grid, Paper, Tooltip } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Popover,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import {
   addToBookmarkPost,
+  deleteUserPost,
   likePost,
   removeToBookmarkPost,
 } from "./userPostSlice";
 import { AddBookmark, RemoveBookmark } from "../Bookmark/bookmarkSlice";
+import { CreatePost } from "../../components/CreatePost";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -36,7 +50,14 @@ const Item = styled(Paper)(({ theme }) => ({
   cursor: "pointer",
   width: "100%",
 }));
-export const UserPost = ({ posts, removeBookmark, handleRemoveBookmark }) => {
+export const UserPost = ({
+  posts,
+  removeBookmark,
+  handleRemoveBookmark,
+  postEdit,
+}) => {
+  const [openDialog, setOpenDialog] = useState(false);
+
   const dispatch = useDispatch();
 
   const addToBookmark = (post) => {
@@ -48,15 +69,38 @@ export const UserPost = ({ posts, removeBookmark, handleRemoveBookmark }) => {
     dispatch(RemoveBookmark(id));
     dispatch(removeToBookmarkPost(id));
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDialog = () => {
+    setOpenDialog(false);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
   return (
     <UserPostContainer>
       <UserPostHeader>
         <UserPostProfile>
-          <UserPostProfileImage src={posts.userImage} alt="Profile" />
-          <UserPostProfileName>John Doe</UserPostProfileName>
+          {/* <UserPostProfileImage src={posts.userImage} alt="Profile" /> */}
+          <Avatar
+            alt="username"
+            variant="round"
+            style={{ paddingLeft: "0", margin: 0, cursor: "pointer" }}
+            src={posts.userImage}
+            // sx={{ width: 175, height: 130 }}
+            // onClick={() => handleAvatarChange(avatar.Avatar)}
+          />
+          <UserPostProfileName>{posts?.name}</UserPostProfileName>
         </UserPostProfile>
         <UserPostActions>
-          {removeBookmark ? (
+          {!postEdit && removeBookmark ? (
             <UserPostAction>
               <div
                 style={{
@@ -83,31 +127,74 @@ export const UserPost = ({ posts, removeBookmark, handleRemoveBookmark }) => {
                 marginRight: "4px",
               }}
             >
-              {posts?.isBookmark || removeBookmark ? (
+              {(!postEdit && posts?.isBookmark) ||
+              (!postEdit && removeBookmark) ? (
                 <Tooltip title="BookMarked">
                   <Bookmark color="primary" />
                 </Tooltip>
-              ) : (
+              ) : !postEdit ? (
                 <Tooltip title="Add To Bookmark" style={{ cursor: "pointer" }}>
                   <BookmarkAddOutlined
                     color="primary"
                     onClick={() => addToBookmark(posts)}
                   />
                 </Tooltip>
-              )}
+              ) : null}
+              {postEdit ? (
+                <>
+                  <Tooltip title="Edit" style={{ cursor: "pointer" }}>
+                    <MoreVert color="primary" onClick={handleClick} />
+                  </Tooltip>
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                  >
+                    <Typography
+                      startIcon={<Edit />}
+                      style={{ cursor: "pointer" }}
+                      sx={{ pt: 2, pl: 1, pr: 1 }}
+                      onClick={() => setOpenDialog(true)}
+                    >
+                      Edit
+                    </Typography>
+                    <CreatePost
+                      posts={posts}
+                      button={false}
+                      openDialog={openDialog}
+                      handleOpenDialog={() => handleDialog()}
+                    />
+                    <Typography
+                      onClick={() => dispatch(deleteUserPost(posts._id))}
+                      startIcon={<Delete />}
+                      sx={{ pt: 2, pl: 1, pr: 1, pb: 1 }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Delete
+                    </Typography>
+                  </Popover>
+                </>
+              ) : null}
             </span>
           </UserPostAction>
         </UserPostActions>
       </UserPostHeader>
       <UserPostContent>{posts.content}</UserPostContent>
-      <UserPostImage
-        src={posts.postImageUrl}
-        style={{
-          height: "350px",
-          marginRight: "4px",
-        }}
-        alt="Post"
-      />
+      {posts.postImageUrl ? (
+        <UserPostImage
+          src={posts.postImageUrl}
+          style={{
+            height: "350px",
+            marginRight: "4px",
+          }}
+          alt="Post"
+        />
+      ) : null}
       <UserPostActions>
         <UserPostAction>
           <Favorite color="primary" />

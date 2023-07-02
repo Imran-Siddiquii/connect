@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const UserSlice = createSlice({
-  name: "users",
+const SingleUserSlice = createSlice({
+  name: "single-users",
   initialState: {
     isLoading: false,
-    users: [],
+    user: [],
     isError: false,
   },
   reducers: {
@@ -14,41 +14,41 @@ const UserSlice = createSlice({
     error: (state, action) => {
       state.isError = action.payload;
     },
-    userList: (state, { payload }) => {
-      state.users = payload;
+    userDetail: (state, { payload }) => {
+      state.user = payload;
     },
-    userFollow: (state, { payload }) => {
-      const followUser = state?.users?.map((ele) => {
-        if (ele._id === payload) {
-          return { ...ele, isFollow: true };
-        }
-        return ele;
-      });
-      state.users = followUser;
-    },
-    userUnfollow: (state, { payload }) => {
-      const followUser = state?.users?.map((ele) => {
-        if (ele._id === payload) {
-          return { ...ele, isFollow: false };
-        }
-        return ele;
-      });
-      state.users = followUser;
-    },
+    // userFollow: (state, { payload }) => {
+    //   const followUser = state?.users?.map((ele) => {
+    //     if (ele._id === payload) {
+    //       return { ...ele, isFollow: true };
+    //     }
+    //     return ele;
+    //   });
+    //   state.users = followUser;
+    // },
+    // userUnfollow: (state, { payload }) => {
+    //   const followUser = state?.users?.map((ele) => {
+    //     if (ele._id === payload) {
+    //       return { ...ele, isFollow: false };
+    //     }
+    //     return ele;
+    //   });
+    //   state.users = followUser;
+    // },
   },
 });
 
-export const { loading, error, userList, userFollow, userUnfollow } =
-  UserSlice.actions;
-export default UserSlice.reducer;
+export const { loading, error, userDetail, userFollow, userUnfollow } =
+  SingleUserSlice.actions;
+export default SingleUserSlice.reducer;
 
-export const fetchUserList = () => {
-  return async function get(dispatch) {
+export const fetchSingleUserDetails = (id) => {
+  return async function getData(dispatch) {
     dispatch(loading(true));
     try {
-      const response = await fetch("api/users");
-      const { users } = await response.json();
-      dispatch(userList(users));
+      const response = await fetch(`/api/users/${id}`);
+      const { user } = await response.json();
+      dispatch(userDetail(user));
       dispatch(loading(false));
     } catch (err) {
       dispatch(loading(false));
