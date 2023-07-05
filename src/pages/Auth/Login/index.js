@@ -39,6 +39,9 @@ const SignupLink = styled(RouterLink)`
   display: block;
   text-align: center;
   margin-top: 10px;
+  color: #1976d2;
+  underline: none;
+  text-decoration: none;
 `;
 
 export const Login = () => {

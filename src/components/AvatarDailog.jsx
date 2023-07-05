@@ -5,9 +5,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { updateAvatar } from "../container/Profile/ProfileSlice";
 import { useDispatch } from "react-redux";
+import { notification } from "antd";
+import { openNotificationWithIcon } from "./Notify";
 
 export default function AvatarDailog({ open, handleClose }) {
   const dispatch = useDispatch();
+  const [api, contextHolder] = notification.useNotification();
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -40,10 +44,13 @@ export default function AvatarDailog({ open, handleClose }) {
   ];
   const handleAvatarChange = (avatar) => {
     dispatch(updateAvatar(avatar));
+    openNotificationWithIcon(api, "success", "Profile Updated");
     handleClose();
   };
   return (
     <div>
+      {contextHolder}
+
       <Dialog
         open={open}
         onClose={handleClose}

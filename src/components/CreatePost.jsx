@@ -45,6 +45,7 @@ export const CreatePost = ({ button, openDialog, handleOpenDialog, posts }) => {
       setOpen(true);
     }
   }, [openDialog]);
+
   const handleClickOpen = () => {
     setOpen(true);
     if (openDialog) {

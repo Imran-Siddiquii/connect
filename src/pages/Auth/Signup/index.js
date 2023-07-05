@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link as RouterLink } from "react-router-dom";
+
 import {
   TextField,
   Button,
@@ -15,8 +17,10 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../../components/Loader";
 
 export const Signup = () => {
-  const [fullName, setFullName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -44,10 +48,13 @@ export const Signup = () => {
     });
 
     switch (field) {
-      case "fullName":
-        setFullName(value);
+      case "firstName":
+        setFirstName(value);
         break;
-      case "userName":
+      case "lastName":
+        setLastName(value);
+        break;
+      case "username":
         setUserName(value);
         break;
       case "password":
@@ -72,11 +79,14 @@ export const Signup = () => {
 
     const newErrors = {};
 
-    if (!fullName) {
-      newErrors.fullName = "Full Name is required";
+    if (!firstName) {
+      newErrors.firstName = "First Name is required";
     }
-    if (!userName) {
-      newErrors.userName = "Username is required";
+    if (!lastName) {
+      newErrors.lastName = "Last Name is required";
+    }
+    if (!username) {
+      newErrors.username = "Username is required";
     }
     if (!password) {
       newErrors.password = "Password is required";
@@ -95,7 +105,9 @@ export const Signup = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // Form submission logic here
-      dispatch(signInAuth({ fullName, userName, password, confirmPassword }));
+      dispatch(
+        signInAuth({ firstName, lastName, username, password, confirmPassword })
+      );
     }
   };
   if (isLoading) {
@@ -108,19 +120,27 @@ export const Signup = () => {
         <form onSubmit={handleSubmit}>
           <StyledTextField
             fullWidth
-            label="Full Name"
-            value={fullName}
-            onChange={(e) => handleChange("fullName", e.target.value)}
-            error={!!errors.fullName}
-            helperText={errors.fullName}
+            label="First Name"
+            value={firstName}
+            onChange={(e) => handleChange("firstName", e.target.value)}
+            error={!!errors.firstName}
+            helperText={errors.firstName}
+          />
+          <StyledTextField
+            fullWidth
+            label="Last Name"
+            value={lastName}
+            onChange={(e) => handleChange("lastName", e.target.value)}
+            error={!!errors.lastName}
+            helperText={errors.lastName}
           />
           <StyledTextField
             fullWidth
             label="Username"
-            value={userName}
-            onChange={(e) => handleChange("userName", e.target.value)}
-            error={!!errors.userName}
-            helperText={errors.userName}
+            value={username}
+            onChange={(e) => handleChange("username", e.target.value)}
+            error={!!errors.username}
+            helperText={errors.username}
           />
           <StyledTextField
             fullWidth
@@ -173,11 +193,19 @@ export const Signup = () => {
             Sign Up
           </StyledButton>
         </form>
+        <SignupLink to="/login">Already have an account?</SignupLink>
       </FormContainer>
     </Container>
   );
 };
-
+const SignupLink = styled(RouterLink)`
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #1976d2;
+  underline: none;
+  text-decoration: none;
+`;
 const Container = styled.div`
   display: flex;
   justify-content: center;

@@ -34,14 +34,10 @@ export const ProfileCard = ({ profile, edit }) => {
   const [open, setOpen] = useState(false);
   const [openEditprofile, setOpenEditprofile] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleClickOpen = () => setOpen(true);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  const handleClose = () => setOpen(false);
+  const handleCloseProfileDetails = () => setOpenEditprofile(false);
   return (
     <Box
       sx={{
@@ -121,7 +117,7 @@ export const ProfileCard = ({ profile, edit }) => {
             ) : null}
             <EditProfileDialog
               open={openEditprofile}
-              handleClose={() => setOpenEditprofile(false)}
+              handleClose={handleCloseProfileDetails}
               profile={profile}
             />
           </div>

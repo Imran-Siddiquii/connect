@@ -6,8 +6,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../container/Profile/ProfileSlice";
+import { notification } from "antd";
+import { openNotificationWithIcon } from "./Notify";
 
 export default function EditProfileDialog({ open, handleClose, profile }) {
+  const [api, contextHolder] = notification.useNotification();
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -34,11 +38,13 @@ export default function EditProfileDialog({ open, handleClose, profile }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     dispatch(updateUser({ editProfile }));
+    handleClose();
+    openNotificationWithIcon(api, "success", "Profile Updated");
   };
   return (
     <div>
+      {contextHolder}
       <Dialog
         open={open}
         onClose={handleClose}

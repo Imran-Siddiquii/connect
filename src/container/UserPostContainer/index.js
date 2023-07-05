@@ -40,6 +40,7 @@ import {
 } from "./userPostSlice";
 import { AddBookmark, RemoveBookmark } from "../Bookmark/bookmarkSlice";
 import { CreatePost } from "../../components/CreatePost";
+import { notification } from "antd";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -55,19 +56,28 @@ export const UserPost = ({
   removeBookmark,
   handleRemoveBookmark,
   postEdit,
+  openNotificationWithIcon,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const dispatch = useDispatch();
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon1 = (type, message) => {
+    api[type]({
+      message: message,
+    });
+  };
 
   const addToBookmark = (post) => {
     dispatch(addToBookmarkPost(post._id));
     dispatch(AddBookmark(post._id));
+    openNotificationWithIcon1("success", "Added to Bookmark");
   };
 
   const removeToBookmark = (id) => {
     dispatch(RemoveBookmark(id));
     dispatch(removeToBookmarkPost(id));
+    openNotificationWithIcon("info", "Remove from Bookmark");
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -86,6 +96,7 @@ export const UserPost = ({
   const id = open ? "simple-popover" : undefined;
   return (
     <UserPostContainer>
+      {contextHolder}
       <UserPostHeader>
         <UserPostProfile>
           {/* <UserPostProfileImage src={posts.userImage} alt="Profile" /> */}

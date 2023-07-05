@@ -20,6 +20,7 @@ const StyledAppBar = styled(AppBar)`
   background-color: #4267b2;
   position: sticky;
   top: 0;
+  z-index: 99 !important;
 `;
 
 const typoColor = {
@@ -110,7 +111,7 @@ const Header = () => {
               navigate("/login");
             }}
           >
-            <SidebarIconText>Signin</SidebarIconText>
+            <SidebarIconText>Login</SidebarIconText>
           </Button>
         )}
       </Toolbar>

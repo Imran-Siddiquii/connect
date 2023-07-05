@@ -8,11 +8,18 @@ import Loader from "../../components/Loader";
 import { UserPost } from "../UserPostContainer";
 import { fetchBookmark } from "./bookmarkSlice";
 import { NavLink } from "react-router-dom";
+import { notification } from "antd";
 
 export const Bookmark = () => {
   const { loading, error, bookmarkPost } = useSelector(
     (state) => state.bookmark
   );
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, message) => {
+    api[type]({
+      message: message,
+    });
+  };
   const { posts, isLoading, isError } = useSelector((state) => state.posts);
 
   const dispatch = useDispatch();
@@ -23,6 +30,7 @@ export const Bookmark = () => {
   return (
     <>
       <StyledContainer maxWidth="xl">
+        {contextHolder}
         <Grid container>
           {/* First column */}
           <Grid
@@ -49,7 +57,11 @@ export const Bookmark = () => {
             ) : (
               posts?.map((card) =>
                 card.isBookmark ? (
-                  <UserPost posts={card} removeBookmark />
+                  <UserPost
+                    posts={card}
+                    removeBookmark={true}
+                    openNotificationWithIcon={openNotificationWithIcon}
+                  />
                 ) : null
               )
             )}

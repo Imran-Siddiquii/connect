@@ -26,6 +26,8 @@ import {
 } from "../UserPostContainer/userPostSlice";
 import { Avatar } from "@mui/material";
 import { useState } from "react";
+import { notification } from "antd";
+import { openNotificationWithIcon } from "../../components/Notify";
 
 const formatDate = () => dayjs().format("YYYY-MM-DDTHH:mm:ssZ");
 
@@ -82,6 +84,7 @@ export default function CustomizedDialogs({
   );
   const { username, firstName, lastName, avatar } = profile;
   const dispatch = useDispatch();
+  const [api, contextHolder] = notification.useNotification();
 
   const handlePostContent = (e) => {
     setUserContent(e.target.value);
@@ -124,8 +127,10 @@ export default function CustomizedDialogs({
     };
     if (postButtonText !== "Post") {
       dispatch(updateUserPost(addUserPostValue));
+      openNotificationWithIcon(api, "success", "Post Update Successfully");
     } else {
       dispatch(addUserPost(addUserPostValue));
+      openNotificationWithIcon(api, "success", "Post Upload Successfully");
     }
     handleClose();
     setToggleImage("initial");
@@ -134,6 +139,7 @@ export default function CustomizedDialogs({
   };
   return (
     <div>
+      {contextHolder}
       <BootstrapDialog
         onClose={() => handleClose()}
         aria-labelledby="customized-dialog-title"

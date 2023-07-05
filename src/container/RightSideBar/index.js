@@ -16,6 +16,8 @@ import {
 } from "../User/UserSlice";
 import { NavLink } from "react-router-dom";
 import { followCount, unfollowCount } from "../Profile/ProfileSlice";
+import { openNotificationWithIcon } from "../../components/Notify";
+import { notification } from "antd";
 
 const ImageWrapper = styled.div`
   display: flex;
@@ -27,6 +29,8 @@ const ImageWrapper = styled.div`
   background-color: #f0f0f0;
 `;
 export const RightSidebar = () => {
+  const [api, contextHolder] = notification.useNotification();
+
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.userList);
   const { profile } = useSelector((state) => state.userProfile);
@@ -35,17 +39,20 @@ export const RightSidebar = () => {
     dispatch(followUser(id));
     dispatch(userFollow(id));
     dispatch(followCount());
+    openNotificationWithIcon(api, "success", "Follow");
   };
   const handleUnfollow = (e, id) => {
     e.preventDefault();
     dispatch(userUnfollow(id));
     dispatch(unfollowUser(id));
     dispatch(unfollowCount());
+    openNotificationWithIcon(api, "info", "Unfollow");
   };
 
   return (
     <>
       <StickyColumn style={{ boxShadow: "-2px -2px 8px 1px #7fbaf5" }}>
+        {contextHolder}
         <RightSidebarContainer>
           {users.map((user) =>
             profile._id == user._id ? null : (

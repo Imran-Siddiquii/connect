@@ -77,6 +77,7 @@ export const signInAuth = (credentail) => {
         dispatch(Error(false));
         const data = await res.json();
         dispatch(AuthResponse(data));
+        dispatch(userProfileUpdate(data.createdUser));
         localStorage.setItem("token", data.encodedToken);
       }
     } catch (error) {
