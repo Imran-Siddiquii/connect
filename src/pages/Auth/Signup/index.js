@@ -123,7 +123,7 @@ export const Signup = () => {
       <Container>
         {contextHolder}
         <FormContainer>
-          <Title>Sign up with ConnectX</Title>
+          <Title>Sign up with Connect</Title>
           <form onSubmit={handleSubmit}>
             <StyledTextField
               fullWidth
