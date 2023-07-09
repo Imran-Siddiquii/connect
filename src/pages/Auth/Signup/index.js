@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { signInAuth } from "../Reducer";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../components/Loader";
+import { openNotificationWithIcon } from "../../../components/Notify";
+import { notification } from "antd";
 
 export const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -28,14 +30,19 @@ export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const dispatch = useDispatch();
-  const { isLoading, token } = useSelector((state) => state.Auth);
+  const { isLoading, token, isError } = useSelector((state) => state.Auth);
+  const [api, contextHolder] = notification.useNotification();
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       navigate("/");
     }
-  }, [token]);
+    if (isError) {
+      openNotificationWithIcon(api, "error", "Alread users exists!");
+    }
+  }, [token, isError]);
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -66,9 +73,6 @@ export const Signup = () => {
       case "checkbox":
         setTermsAccepted(!termsAccepted);
         break;
-      case "passwordError":
-        setPasswordError(value);
-        break;
       default:
         break;
     }
@@ -96,6 +100,7 @@ export const Signup = () => {
     }
     if (password !== confirmPassword) {
       newErrors.passwordError = "Password should be match";
+      setPasswordError("Password should be match");
     }
     if (!termsAccepted) {
       newErrors.termsAccepted = "You must accept the Terms & Conditions";
@@ -114,88 +119,91 @@ export const Signup = () => {
     return <Loader />;
   }
   return (
-    <Container>
-      <FormContainer>
-        <Title>Sign up with ConnectX</Title>
-        <form onSubmit={handleSubmit}>
-          <StyledTextField
-            fullWidth
-            label="First Name"
-            value={firstName}
-            onChange={(e) => handleChange("firstName", e.target.value)}
-            error={!!errors.firstName}
-            helperText={errors.firstName}
-          />
-          <StyledTextField
-            fullWidth
-            label="Last Name"
-            value={lastName}
-            onChange={(e) => handleChange("lastName", e.target.value)}
-            error={!!errors.lastName}
-            helperText={errors.lastName}
-          />
-          <StyledTextField
-            fullWidth
-            label="Username"
-            value={username}
-            onChange={(e) => handleChange("username", e.target.value)}
-            error={!!errors.username}
-            helperText={errors.username}
-          />
-          <StyledTextField
-            fullWidth
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => handleChange("password", e.target.value)}
-            error={!!errors.password}
-            helperText={errors.password}
-          />
-          <StyledTextField
-            fullWidth
-            label="Confirm Password"
-            type={showPassword ? "text" : "password"}
-            value={confirmPassword}
-            onChange={(e) => handleChange("confirmPassword", e.target.value)}
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleTogglePassword}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          {passwordError && (
-            <p style={{ color: "red", fontSize: "0.8rem" }}>
-              {errors.passwordError}
-            </p>
-          )}
-          <StyledFormControlLabel
-            control={
-              <Checkbox
-                checked={termsAccepted}
-                color="primary"
-                onChange={(e) => handleChange("checkbox", e.target.checked)}
-              />
-            }
-            label="I accept all the Terms & Conditions"
-          />
-          {errors.termsAccepted && (
-            <p style={{ color: "red", fontSize: "0.8rem" }}>
-              {errors.termsAccepted}
-            </p>
-          )}
-          <StyledButton type="submit" variant="contained" color="primary">
-            Sign Up
-          </StyledButton>
-        </form>
-        <SignupLink to="/login">Already have an account?</SignupLink>
-      </FormContainer>
-    </Container>
+    <>
+      <Container>
+        {contextHolder}
+        <FormContainer>
+          <Title>Sign up with ConnectX</Title>
+          <form onSubmit={handleSubmit}>
+            <StyledTextField
+              fullWidth
+              label="First Name"
+              value={firstName}
+              onChange={(e) => handleChange("firstName", e.target.value)}
+              error={!!errors.firstName}
+              helperText={errors.firstName}
+            />
+            <StyledTextField
+              fullWidth
+              label="Last Name"
+              value={lastName}
+              onChange={(e) => handleChange("lastName", e.target.value)}
+              error={!!errors.lastName}
+              helperText={errors.lastName}
+            />
+            <StyledTextField
+              fullWidth
+              label="Username"
+              value={username}
+              onChange={(e) => handleChange("username", e.target.value)}
+              error={!!errors.username}
+              helperText={errors.username}
+            />
+            <StyledTextField
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => handleChange("password", e.target.value)}
+              error={!!errors.password}
+              helperText={errors.password}
+            />
+            <StyledTextField
+              fullWidth
+              label="Confirm Password"
+              type={showPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => handleChange("confirmPassword", e.target.value)}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePassword}>
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {passwordError && (
+              <p style={{ color: "red", fontSize: "0.8rem" }}>
+                {errors.passwordError}
+              </p>
+            )}
+            <StyledFormControlLabel
+              control={
+                <Checkbox
+                  checked={termsAccepted}
+                  color="primary"
+                  onChange={(e) => handleChange("checkbox", e.target.checked)}
+                />
+              }
+              label="I accept all the Terms & Conditions"
+            />
+            {errors.termsAccepted && (
+              <p style={{ color: "red", fontSize: "0.8rem" }}>
+                {errors.termsAccepted}
+              </p>
+            )}
+            <StyledButton type="submit" variant="contained" color="primary">
+              Sign Up
+            </StyledButton>
+          </form>
+          <SignupLink to="/login">Already have an account?</SignupLink>
+        </FormContainer>
+      </Container>
+    </>
   );
 };
 const SignupLink = styled(RouterLink)`

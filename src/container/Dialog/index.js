@@ -205,7 +205,7 @@ export default function CustomizedDialogs({
                   handleUploadClick={handleUploadClick}
                   imageResetHandler={imageResetHandler}
                 />
-                Photo/Video
+                Photo
               </UserCardActionButton>
             </UserCardActions>
           </UserCardContainer>

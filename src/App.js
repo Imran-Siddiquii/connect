@@ -5,7 +5,7 @@ import { PrivateRoute } from "./components/PriveteRoute";
 import { Signup } from "./pages/Auth/Signup";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Profile } from "./container/Profile";
-import { LikedPost } from "./container/LikedPost";
+import { UserList } from "./container/UserList";
 import { Bookmark } from "./container/Bookmark";
 import Header from "./components/Header";
 import { useEffect } from "react";
@@ -13,8 +13,6 @@ import { useDispatch } from "react-redux";
 import { fetchUserPost } from "./container/UserPostContainer/userPostSlice";
 import { Users } from "./container/User";
 import { fetchUserList } from "./container/User/UserSlice";
-import { Sidebar } from "./container/Sidebar";
-import { RightSidebar } from "./container/RightSideBar";
 
 const theme = createTheme({
   breakpoints: {
@@ -32,6 +30,7 @@ function App() {
   useEffect(() => {
     dispatch(fetchUserPost());
     dispatch(fetchUserList());
+    //eslint-disable-next-line
   }, []);
   return (
     <>
@@ -52,6 +51,8 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/bookmark" element={<Bookmark />} />
+            <Route exact path="/users" element={<UserList />} />
+
             <Route exact path="/user-profile/:id" element={<Users />} />
           </Routes>
         </BrowserRouter>

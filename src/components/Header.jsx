@@ -9,7 +9,7 @@ import {
   ProfileName,
   SidebarIconText,
 } from "../container/style";
-import { Bookmark, FavoriteOutlined } from "@mui/icons-material";
+import { Bookmark, People } from "@mui/icons-material";
 import { Avatar, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -73,23 +73,15 @@ const Header = () => {
             <Bookmark />
           </Typography>
         </NavLinkDiv>
-        <NavLinkDiv to="/liked-post" style={typoColor}>
+        <NavLinkDiv to="/users" style={typoColor}>
           <Typography
             style={{ color: "white" }}
             variant="body2"
             sx={{ display: { xs: "block", sm: "none" } }}
           >
-            <FavoriteOutlined />
+            <People />
           </Typography>
         </NavLinkDiv>
-        <Typography
-          variant="body2"
-          sx={{ display: { xs: "block", sm: "none" } }}
-        >
-          <Button variant="outlined" style={{ background: "white" }}>
-            <SidebarIconText>Post</SidebarIconText>
-          </Button>
-        </Typography>
         {Auth || token ? (
           <Button
             variant="outlined"

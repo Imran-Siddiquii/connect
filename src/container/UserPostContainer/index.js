@@ -7,7 +7,6 @@ import {
   UserPostHeader,
   UserPostImage,
   UserPostProfile,
-  UserPostProfileImage,
   UserPostProfileName,
 } from "./style";
 import {
@@ -181,7 +180,10 @@ export const UserPost = ({
                       handleOpenDialog={() => handleDialog()}
                     />
                     <Typography
-                      onClick={() => dispatch(deleteUserPost(posts._id))}
+                      onClick={() => {
+                        dispatch(deleteUserPost(posts._id));
+                        openNotificationWithIcon1("success", "Post Deleted");
+                      }}
                       startIcon={<Delete />}
                       sx={{ pt: 2, pl: 1, pr: 1, pb: 1 }}
                       style={{ cursor: "pointer" }}

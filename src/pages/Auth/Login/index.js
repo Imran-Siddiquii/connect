@@ -6,6 +6,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoginAuth } from "../Reducer";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../components/Loader";
+import { notification } from "antd";
+import { openNotificationWithIcon } from "../../../components/Notify";
 
 const Container = styled.div`
   display: flex;
@@ -53,6 +55,8 @@ export const Login = () => {
   const { isLoading, token, isError, data } = useSelector(
     (state) => state.Auth
   );
+  const [api, contextHolder] = notification.useNotification();
+
   const navigate = useNavigate();
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -62,7 +66,10 @@ export const Login = () => {
     if (token) {
       navigate("/");
     }
-  }, [token]);
+    if (isError) {
+      openNotificationWithIcon(api, "error", "Please enter valid credential!");
+    }
+  }, [token, isError]);
 
   const handleChange = (field, value) => {
     setErrors((prevErrors) => {
@@ -109,6 +116,7 @@ export const Login = () => {
   }
   return (
     <Container>
+      {contextHolder}
       <FormContainer>
         <Title>Login</Title>
         <form onSubmit={handleSubmit}>

@@ -2,24 +2,17 @@ import { Edit } from "@mui/icons-material";
 import {
   Avatar,
   Box,
+  Button,
   Grid,
   IconButton,
-  Paper,
   Tooltip,
   Typography,
-  styled,
 } from "@mui/material";
 import { useState } from "react";
 import AvatarDailog from "./AvatarDailog";
 import EditProfileDialog from "./EditProfileDialog";
+import { CreatePost } from "./CreatePost";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 export const ProfileCard = ({ profile, edit }) => {
   const {
     firstName,
@@ -33,11 +26,14 @@ export const ProfileCard = ({ profile, edit }) => {
   } = profile;
   const [open, setOpen] = useState(false);
   const [openEditprofile, setOpenEditprofile] = useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
   const handleClickOpen = () => setOpen(true);
 
   const handleClose = () => setOpen(false);
   const handleCloseProfileDetails = () => setOpenEditprofile(false);
+  const handleDialog = () => {
+    setOpenDialog(false);
+  };
   return (
     <Box
       sx={{
@@ -86,7 +82,18 @@ export const ProfileCard = ({ profile, edit }) => {
         </Grid>
         <Grid item xs={8} style={{}}>
           <div style={{ position: "relative" }}>
-            <Typography variant="h6">{`${firstName}  ${lastName}`}</Typography>
+            <div style={{ display: "flex" }}>
+              <Typography variant="h6">{`${firstName}  ${lastName}`}</Typography>
+              <Typography
+                variant="body2"
+                sx={{ display: { xs: "block", sm: "none" } }}
+                ml={14}
+              >
+                <Button variant="contained" onClick={() => setOpenDialog(true)}>
+                  Post
+                </Button>
+              </Typography>
+            </div>
             <Typography variant="body1"> {username}</Typography>
             <Typography variant="body1">
               Portfolio Url : &nbsp;
@@ -97,6 +104,7 @@ export const ProfileCard = ({ profile, edit }) => {
             <Typography variant="body1">Bio : {bio}</Typography>
             <Typography variant="body1">Followers : {followers}</Typography>
             <Typography variant="body1">Following : {following}</Typography>
+
             {edit ? (
               <Tooltip title="Edit Profile">
                 <IconButton
@@ -115,6 +123,7 @@ export const ProfileCard = ({ profile, edit }) => {
                 </IconButton>
               </Tooltip>
             ) : null}
+
             <EditProfileDialog
               open={openEditprofile}
               handleClose={handleCloseProfileDetails}
@@ -122,6 +131,11 @@ export const ProfileCard = ({ profile, edit }) => {
             />
           </div>
         </Grid>
+        <CreatePost
+          button={false}
+          openDialog={openDialog}
+          handleOpenDialog={() => handleDialog()}
+        />
       </Grid>
     </Box>
   );
